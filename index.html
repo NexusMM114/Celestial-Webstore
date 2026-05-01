@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CelestrailMc • New Era of LifeSteal</title>
+    
+    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. Core Variables & Setup --- */
+        :root {
+          --bg: #020617;
+          --bg-accent: #0f172a;
+          --primary-purple: #c084fc;
+          --secondary-purple: #7e22ce;
+          --glass: rgba(255, 255, 255, 0.03);
+          --border: rgba(192, 132, 252, 0.2);
+          --text: #f8fafc;
+          --muted: #94a3b8;
+        }
+
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: "Space Grotesk", sans-serif;
+        }
+
+        body {
+          background-color: var(--bg);
+          background-image: radial-gradient(circle at top, var(--bg-accent) 0%, var(--bg) 80%);
+          color: var(--text);
+          overflow-x: hidden;
+          min-height: 100vh;
+        }
+
+        /* --- 2. Animations --- */
+        @keyframes float {
+          0% { transform: translateY(0px) rotate(-1deg); }
+          50% { transform: translateY(-25px) rotate(1deg); }
+          100% { transform: translateY(0px) rotate(-1deg); }
+        }
+
+        .particle {
+          position: fixed;
+          top: -10%;
+          background-color: var(--primary-purple);
+          border-radius: 50%;
+          opacity: 0.3;
+          pointer-events: none;
+          z-index: 1;
+          animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+          0% { transform: translateY(0vh) scale(0); opacity: 0.6; }
+          50% { opacity: 0.4; }
+          100% { transform: translateY(100vh) scale(1); opacity: 0; }
+        }
+
+        /* --- 3. Typography & Gradients --- */
+        .purple-gradient {
+          background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 800;
+        }
+
+        .italic { font-style: italic; }
+
+        /* --- 4. Navigation --- */
+        .page-nav {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          display: flex;
+          gap: 10px;
+          z-index: 999;
+        }
+
+        .page-nav a {
+          padding: 10px 20px;
+          border-radius: 12px;
+          text-decoration: none;
+          font-weight: 700;
+          color: var(--text);
+          background: var(--glass);
+          border: 1px solid var(--border);
+          backdrop-filter: blur(10px);
+          font-size: 0.75rem;
+          transition: 0.3s;
+        }
+
+        .page-nav .active {
+          background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+          color: #fff;
+          border: none;
+          box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
+        }
+
+        /* --- 5. Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .site-logo {
+            width: 450px;
+            max-width: 90%;
+            height: auto;
+            margin-bottom: 20px;
+            /* Purple shadow and a slight glow effect */
+            filter: drop-shadow(0 15px 15px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 30px rgba(192, 132, 252, 0.4));
+            animation: float 6s ease-in-out infinite; 
+        }
+
+        /* --- 6. The Matrix Card System --- */
+        section { padding: 80px 10%; position: relative; z-index: 2; }
+        .title { text-align: center; font-size: 2.8rem; margin-bottom: 50px; }
+
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 25px;
+          justify-content: center;
+        }
+
+        .card {
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid var(--border);
+          padding: 40px 30px;
+          border-radius: 2rem;
+          backdrop-filter: blur(15px);
+          transition: 0.4s ease;
+          text-align: center;
+        }
+
+        .card:hover {
+          transform: translateY(-10px);
+          border-color: var(--primary-purple);
+          background: rgba(192, 132, 252, 0.05);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 15px auto; /* Centers the image horizontally */
+            border: 3px solid var(--border);
+            object-fit: cover;
+            display: block; /* Ensures the image sits alone on its line */
+        }
+
+        /* --- 7. Buttons & Tiers --- */
+        .btn-purple {
+          background: linear-gradient(90deg, var(--secondary-purple), var(--primary-purple));
+          color: #fff;
+          font-weight: 800;
+          text-transform: uppercase;
+          border: none;
+          padding: 14px 30px;
+          border-radius: 12px;
+          cursor: pointer;
+          text-decoration: none;
+          display: inline-block;
+          transition: 0.3s;
+          font-size: 0.85rem;
+          letter-spacing: 1px;
+        }
+
+        .btn-purple:hover {
+          filter: brightness(1.2);
+          box-shadow: 0 0 25px rgba(192, 132, 252, 0.5);
+        }
+
+        .role-pill {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            text-transform: uppercase;
+        }
+
+        .text-owner { color: #f8fafc; background: var(--secondary-purple); }
+        .text-dev { color: var(--primary-purple); }
+        .text-mod { color: #22c55e; }
+        .text-partner { color: #fbbf24; }
+
+        footer { text-align: center; padding: 60px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; }
+    </style>
+</head>
+
+<body>
+
+    <nav class="page-nav">
+        <a href="index.html" class="active">HOME</a>
+        <a href="rules.html">RULES</a>
+        <a href="store.html">STORE</a>
+        <a href="crates.html">CRATES</a>
+    </nav>
+
+    <header class="hero">
+        <img src="https://i.ibb.co/Y40tL1QM/file-00000000c02c720893f224de887d0b14.png" 
+             class="site-logo" 
+             alt="CelestrailMc Logo" 
+             border="0">
+        
+        <p class="italic" style="color: var(--primary-purple); font-size: 1.2rem; letter-spacing: 2px; margin-top: 20px;">
+            SURVIVAL REBORN • THE COLD FRONTIER
+        </p>
+        
+        <div style="margin-top: 40px;">
+            <p style="margin-bottom: 15px; font-weight: 700; color: #fff; font-size: 1.2rem;">🌐 play.celestrailmc.fun:1477</p>
+            <a href="https://discord.gg/kZ9hzmPruR" target="_blank" class="btn-purple">Join the Discord</a>
+        </div>
+    </header>
+
+    <section id="staff">
+        <h2 class="title purple-gradient">Executive Team</h2>
+        <div class="grid">
+            <div class="card">
+                <img src="https://cdn.discordapp.com/attachments/1497642231493038120/1499627529768665268/df72ad25c547b7c37108240503587297.jpg?ex=69f57c78&is=69f42af8&hm=67d8e3b773a9f1d2b6c7e2018e1bfcaaa6d248313fdb68a8b53f19b9ea795199&" alt="TheAryan">
+                <div class="role-pill text-owner">OWNER</div>
+                <h3>TheAryan</h3>
+                <p style="color: var(--muted); margin-top: 10px;">The Project Owner</p>
+            </div>
+
+            <div class="card">
+                <img src="https://cdn.discordapp.com/attachments/1497642231493038120/1499660949513306212/b12eaacd9de9906de658c926516a0e12.jpg?ex=69f59b98&is=69f44a18&hm=0a468178cd7aa3a037c458d6a55fa1307631b7d1c64ff93dc221b595557b1046&" alt="Kakashi">
+                <div class="role-pill text-dev">DEVELOPER</div>
+                <h3>Kakashi</h3>
+                <p style="color: var(--muted); margin-top: 10px;">Lead Systems Engineer</p>
+            </div>
+
+            <div class="card">
+                <img src="https://cdn.discordapp.com/attachments/1497181279232327752/1497273072644788224/discord_fake_avatar_decorations_1777048083084.gif?ex=69f57d76&is=69f42bf6&hm=b4ea6a4e9b21bcd802336329efd67746b6a5bfd4df0f00676cdc8244d2c98d92&" alt="Nexus">
+                <div class="role-pill text-mod">MANAGER</div>
+                <h3>Nexus</h3>
+                <p style="color: var(--muted); margin-top: 10px;">Community Manager & Developer</p>
+            </div>
+
+            <div class="card">
+                <img src="https://cdn.discordapp.com/avatars/1155123550080999485/b7b79579bdc4c6132670448f7182ffae.png?size=1024" alt="Sushant">
+                <div class="role-pill text-partner">HOSTING</div>
+                <h3>Sushant (Angara)</h3>
+                <p style="color: var(--muted); margin-top: 10px;">HOSTING ANGARA</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 CelestrailMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
+    </footer>
+
+    <script>
+        // Purple Particle Generator
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 6 + 2 + 'px';
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.animationDuration = Math.random() * 4 + 3 + 's';
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 7000);
+        }
+        setInterval(createParticle, 200);
+    </script>
+</body>
+</html>
