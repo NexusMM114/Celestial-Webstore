@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CelestrailMc • Official Rules</title>
+    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Core Variables & Setup --- */
+        :root {
+          --bg: #020617;
+          --bg-accent: #0f172a;
+          --primary-purple: #c084fc;
+          --secondary-purple: #7e22ce;
+          --glass: rgba(255, 255, 255, 0.03);
+          --border: rgba(192, 132, 252, 0.2);
+          --text: #f8fafc;
+          --muted: #94a3b8;
+          --alert-red: #ef4444; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Space Grotesk", sans-serif; }
+
+        body {
+          background-color: var(--bg);
+          background-image: radial-gradient(circle at top, var(--bg-accent) 0%, var(--bg) 80%);
+          color: var(--text);
+          overflow-x: hidden;
+          min-height: 100vh;
+        }
+
+        /* --- 2. Animations (Particles) --- */
+        .particle {
+          position: fixed;
+          top: -10%;
+          background-color: var(--primary-purple);
+          border-radius: 50%;
+          opacity: 0.3;
+          pointer-events: none;
+          z-index: 1;
+          animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+          0% { transform: translateY(0vh) scale(0); opacity: 0.6; }
+          50% { opacity: 0.4; }
+          100% { transform: translateY(100vh) scale(1); opacity: 0; }
+        }
+
+        /* --- 3. Typography & Navigation --- */
+        .purple-gradient {
+          background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 800;
+        }
+
+        .page-nav {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          display: flex;
+          gap: 10px;
+          z-index: 999;
+        }
+
+        .page-nav a {
+          padding: 10px 20px;
+          border-radius: 12px;
+          text-decoration: none;
+          font-weight: 700;
+          color: var(--text);
+          background: var(--glass);
+          border: 1px solid var(--border);
+          backdrop-filter: blur(10px);
+          font-size: 0.75rem;
+          transition: 0.3s;
+        }
+
+        .page-nav .active {
+          background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+          color: #fff;
+          border: none;
+          box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
+        }
+
+        /* --- 4. Content Containers --- */
+        section { padding: 120px 10% 60px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
+        
+        .rule-container {
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid var(--border);
+          padding: 40px;
+          border-radius: 2rem;
+          backdrop-filter: blur(15px);
+          margin-bottom: 30px;
+          transition: 0.4s;
+        }
+
+        .rule-container:hover {
+          border-color: var(--primary-purple);
+          background: rgba(192, 132, 252, 0.05);
+          transform: translateY(-5px);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .rule-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        ul { list-style: none; }
+        li { 
+            margin-bottom: 12px; 
+            padding-left: 25px; 
+            position: relative; 
+            color: var(--muted);
+        }
+        li::before {
+            content: "➜";
+            position: absolute;
+            left: 0;
+            color: var(--primary-purple);
+        }
+
+        /* --- 5. Punishment Table --- */
+        .comparison-wrapper {
+          overflow-x: auto;
+          border-radius: 1rem;
+          background: rgba(0, 0, 0, 0.3);
+          border: 1px solid var(--border);
+          margin-top: 20px;
+        }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 20px; border-bottom: 1px solid var(--border); }
+        th { color: var(--primary-purple); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; }
+        
+        .text-alert { color: var(--alert-red); font-weight: 600; }
+        .text-warn { color: var(--primary-purple); font-weight: 600; }
+
+        footer { text-align: center; padding: 60px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+   <nav class="page-nav">
+    <a href="index.html">HOME</a>
+    <a href="rules.html" class="active">RULES</a>
+    <a href="store.html">STORE</a>
+    <a href="crates.html">CRATES</a>
+</nav>
+
+    <section>
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h1 class="purple-gradient" style="font-size: 3.5rem; font-weight: 900;">✦ CelestrailMc Rules</h1>
+            <p style="color: var(--primary-purple); font-style: italic; margin-top: 10px;">A premium survival experience needs clear rules. Read carefully.</p>
+        </div>
+
+        <div class="rule-container">
+            <div class="rule-title"><span class="purple-gradient">✦</span> Agreement Notice</div>
+            <p style="color: var(--muted);">By joining, playing, or participating in <b class="purple-gradient">CelestrailMc</b>, you automatically agree to follow all rules listed on this page. Ignorance is not an excuse. Staff decisions are final.</p>
+        </div>
+
+        <div class="rule-container">
+            <div class="rule-title"><span class="purple-gradient">❖</span> General Conduct</div>
+            <ul>
+                <li>Treat all players and staff with respect.</li>
+                <li>No NSFW content, hate speech, or harassment.</li>
+                <li>No spamming, advertising, or self-promotion.</li>
+                <li>Respect privacy and personal information.</li>
+            </ul>
+        </div>
+
+        <div class="rule-container">
+            <div class="rule-title"><span class="purple-gradient">⟡</span> SMP Gameplay Rules</div>
+            <ul>
+                <li>No cheating, hacking, or exploiting bugs.</li>
+                <li>No griefing, stealing, or scamming.</li>
+                <li>PvP must be fair and mutual.</li>
+                <li>Respect community builds and claims.</li>
+            </ul>
+        </div>
+
+        <div class="rule-container" style="border-color: rgba(239, 68, 68, 0.3);">
+            <div class="rule-title"><span class="text-alert">⚑</span> Punishment Severity</div>
+            <div class="comparison-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Violation</th>
+                            <th>First Offense</th>
+                            <th>Repeat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Spam / Minor Abuse</td>
+                            <td class="text-warn">Warn</td>
+                            <td class="text-warn">Mute</td>
+                        </tr>
+                        <tr>
+                            <td>Harassment / Toxicity</td>
+                            <td class="text-warn">Mute</td>
+                            <td class="text-alert">Temp Ban</td>
+                        </tr>
+                        <tr>
+                            <td>Cheating / Exploits</td>
+                            <td class="text-alert">Temp Ban</td>
+                            <td class="text-alert">Permanent Ban</td>
+                        </tr>
+                        <tr>
+                            <td>Griefing</td>
+                            <td class="text-alert">Ban</td>
+                            <td class="text-alert">Permanent Ban</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 CelestrailMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
+    </footer>
+
+    <script>
+        // Purple Particle Generator
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = Math.random() * 100 + 'vw';
+            const size = Math.random() * 6 + 2 + 'px';
+            particle.style.width = size;
+            particle.style.height = size;
+            particle.style.animationDuration = Math.random() * 4 + 3 + 's';
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, 7000);
+        }
+        setInterval(createParticle, 200);
+    </script>
+</body>
+</html>
