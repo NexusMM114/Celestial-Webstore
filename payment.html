@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CelestialMc • Secure Checkout</title>
+    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+          --bg: #020617;
+          --bg-accent: #0f172a;
+          --primary-purple: #c084fc;
+          --secondary-purple: #7e22ce;
+          --glass: rgba(255, 255, 255, 0.05);
+          --border: rgba(192, 132, 252, 0.2);
+          --text: #f8fafc;
+          --muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Space Grotesk", sans-serif; }
+
+        body {
+          background-color: var(--bg);
+          background-image: radial-gradient(circle at top, var(--bg-accent) 0%, var(--bg) 80%);
+          color: var(--text);
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 60px 20px;
+          overflow-x: hidden;
+        }
+
+        .purple-gradient {
+          background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 800;
+        }
+
+        /* --- SMOOTHER & SLOWER MAC OS GENIE EFFECT --- */
+        .checkout-container {
+            background: var(--bg-accent);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            text-align: center;
+            
+            transform-origin: bottom center; 
+            /* Slower entrance: 0.8 seconds */
+            animation: genieIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .genie-out {
+            /* Slower exit: 0.8 seconds */
+            animation: genieOut 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
+        }
+
+        @keyframes genieIn {
+            0% {
+                opacity: 0;
+                /* Reduced rotation from -30deg to -15deg for a more subtle bend */
+                transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
+            }
+        }
+
+        @keyframes genieOut {
+            0% {
+                opacity: 1;
+                transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px);
+            }
+        }
+        /* -------------------------------------- */
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+        
+        .form-group input {
+            width: 100%; padding: 12px 15px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border);
+            border-radius: 8px; color: #fff; outline: none; transition: 0.3s; font-family: inherit;
+        }
+        .form-group input:focus { border-color: var(--primary-purple); box-shadow: 0 0 10px rgba(192, 132, 252, 0.2); }
+        
+        /* Glassmorphism Dropdown */
+        .form-group select {
+            width: 100%; 
+            padding: 14px 15px; 
+            background: var(--glass) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>') no-repeat right 15px center;
+            background-size: 18px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 12px; 
+            color: #fff; 
+            outline: none; 
+            transition: 0.3s ease; 
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        
+        .form-group select:hover, .form-group select:focus { 
+            border-color: var(--primary-purple); 
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(192, 132, 252, 0.2); 
+        }
+        
+        .form-group select option { 
+            background: var(--bg-accent); 
+            color: #fff; 
+            font-weight: 600;
+            padding: 10px;
+        }
+
+        .form-group input[type="file"] {
+            padding: 10px; background: rgba(192, 132, 252, 0.1); border: 1px dashed var(--primary-purple); color: var(--muted); cursor: pointer;
+        }
+        
+        .form-group input[type="number"] { font-size: 1.1rem; font-weight: bold; text-align: center; }
+
+        .qr-box { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 10px 0 20px 0; }
+        .qr-box img { width: 180px; height: 180px; display: block; }
+
+        .btn-purple {
+          background: linear-gradient(90deg, var(--secondary-purple), var(--primary-purple));
+          color: #fff; font-weight: 900; text-transform: uppercase; border: none; padding: 16px;
+          border-radius: 12px; cursor: pointer; width: 100%; display: inline-block; transition: 0.3s;
+        }
+        .btn-purple:hover { filter: brightness(1.2); box-shadow: 0 0 25px rgba(192, 132, 252, 0.5); transform: translateY(-2px); }
+        .btn-purple:disabled { filter: grayscale(1); cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .back-btn { position: absolute; top: 20px; left: 20px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s;}
+        .back-btn:hover { color: var(--primary-purple); }
+    </style>
+</head>
+
+<body>
+    <a href="#" class="back-btn" onclick="goBack(event)">← CANCEL & BACK</a>
+
+    <div class="checkout-container" id="checkoutBox">
+        <h2 style="margin-bottom: 5px;">Secure Checkout</h2>
+        <h3 class="purple-gradient" id="displayItem" style="font-size: 1.8rem; margin-bottom: 10px;">Loading...</h3>
+        <p style="color: var(--muted); margin-bottom: 25px; font-weight: 700;">Total to Pay: <span style="color: var(--primary-purple); font-size: 1.5rem;" id="displayPrice">₹0</span></p>
+
+        <div class="form-group">
+            <label>Minecraft Username</label>
+            <input type="text" id="ignInput" placeholder="Enter your username...">
+        </div>
+
+        <div class="form-group">
+            <label>Discord ID / Tag <span style="color: var(--primary-purple);">*REQUIRED*</span></label>
+            <input type="text" id="discordInput" placeholder="Example: thearyan_01">
+        </div>
+
+        <div class="form-group" id="qtyGroup" style="display: none;">
+            <label>Quantity</label>
+            <input type="number" id="quantityInput" value="1" min="1" max="100" onchange="updateDisplay()" onkeyup="updateDisplay()">
+        </div>
+
+        <div class="form-group">
+            <label>Discount Code (Optional)</label>
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="couponInput" placeholder="Enter code..." style="text-transform: uppercase;">
+                <button class="btn-purple" style="width: auto; padding: 12px 20px;" onclick="applyCoupon()">Apply</button>
+            </div>
+            <small id="couponMessage" style="display: none; margin-top: 5px; font-weight: bold;"></small>
+        </div>
+
+        <div class="form-group">
+            <label>Select Payment UPI</label>
+            <select id="upiSelect" onchange="updateDisplay()">
+                <option value="7823831503@ybl">Option 1: 7823831503@ybl</option>
+                <option value="lavyanshboss@fam">Option 2: lavyanshboss@fam</option>
+            </select>
+        </div>
+
+        <p style="font-weight: 700; color: var(--muted); font-size: 0.85rem; margin-bottom: 5px;">Scan to Pay</p>
+        <div class="qr-box">
+            <img id="qrImage" src="" alt="Loading QR Code...">
+        </div>
+
+        <div class="form-group">
+            <label>Transaction ID / Reference No.</label>
+            <input type="text" id="trxInput" placeholder="Enter the 12-digit number...">
+        </div>
+
+        <div class="form-group">
+            <label>Upload Payment Screenshot <span style="color: var(--primary-purple);">*REQUIRED*</span></label>
+            <input type="file" id="screenshotInput" accept="image/png, image/jpeg, image/jpg">
+        </div>
+
+        <button class="btn-purple" id="submitBtn" onclick="submitPayment()">Confirm & Submit Payment</button>
+    </div>
+
+    <script>
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1500058089863254067/Cnvfn6mMurh1ALNn8ppugbDK0K02pSE5eOXQTzTMw9krivWO5sQrheglpPxSCukrviSc"; 
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedItem = urlParams.get('item') || 'Unknown Item';
+        const basePrice = parseInt(urlParams.get('price')) || 0;
+        const durationMonths = parseInt(urlParams.get('months')) || 1;
+        const purchaseType = urlParams.get('type') || 'rank'; 
+        
+        let finalPrice = basePrice * durationMonths;
+        let discountPercent = 0;
+        let appliedCouponCode = "None";
+
+        function goBack(e) {
+            e.preventDefault();
+            document.getElementById('checkoutBox').classList.add('genie-out');
+            
+            // Adjusted timer to match the slower 0.8s animation
+            setTimeout(() => {
+                window.location.href = purchaseType === 'crate' ? "crates.html" : "store.html";
+            }, 750); 
+        }
+
+        function updateDisplay() {
+            let qty = 1;
+            if (purchaseType === 'crate') {
+                qty = parseInt(document.getElementById('quantityInput').value);
+                if (isNaN(qty) || qty < 1) qty = 1;
+            }
+
+            let baseTotal = basePrice * (purchaseType === 'rank' ? durationMonths : qty);
+            let discountAmount = Math.floor(baseTotal * discountPercent);
+            finalPrice = baseTotal - discountAmount;
+            
+            let itemText = purchaseType === 'rank' 
+                ? `${selectedItem} (${durationMonths} Months)` 
+                : (qty > 1 ? `${qty}x [${selectedItem}]` : selectedItem);
+                
+            document.getElementById('displayItem').textContent = itemText;
+            
+            if(discountAmount > 0) {
+                document.getElementById('displayPrice').innerHTML = `<span style="text-decoration: line-through; color: var(--muted); font-size: 1.1rem;">₹${baseTotal}</span> ₹${finalPrice}`;
+            } else {
+                document.getElementById('displayPrice').textContent = "₹" + finalPrice;
+            }
+            
+            const activeUpi = document.getElementById('upiSelect').value;
+            document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=${activeUpi}%26pn=CelestialMc%26am=${finalPrice}`;
+        }
+
+        function applyCoupon() {
+            const code = document.getElementById('couponInput').value.trim().toUpperCase();
+            const msg = document.getElementById('couponMessage');
+            
+            if (code === 'NEWMC5') {
+                discountPercent = (purchaseType === 'rank') ? 0.02 : 0.03;
+                appliedCouponCode = code;
+                msg.textContent = `${discountPercent * 100}% Discount Applied!`; 
+                msg.style.color = "#22c55e"; msg.style.display = "block";
+            } else if (code === 'KINGMC10' || code === 'SAGARMC10') {
+                discountPercent = 0.10;
+                appliedCouponCode = code;
+                msg.textContent = "10% Discount Applied!"; 
+                msg.style.color = "#22c55e"; msg.style.display = "block";
+            } else {
+                discountPercent = 0;
+                appliedCouponCode = "None";
+                msg.textContent = "Invalid or expired code."; 
+                msg.style.color = "var(--primary-purple)"; msg.style.display = "block";
+            }
+            updateDisplay();
+        }
+
+        async function submitPayment() {
+            const ign = document.getElementById('ignInput').value.trim();
+            const trxId = document.getElementById('trxInput').value.trim();
+            const discordId = document.getElementById('discordInput').value.trim();
+            const activeUpi = document.getElementById('upiSelect').value;
+            const fileInput = document.getElementById('screenshotInput');
+
+            if(!ign || !trxId || !discordId) { alert("Please enter your Minecraft IGN, Discord ID, and Transaction ID."); return; }
+            if(fileInput.files.length === 0) { alert("You MUST upload a payment screenshot to continue!"); return; }
+
+            const btn = document.getElementById('submitBtn');
+            btn.textContent = "Uploading & Processing...";
+            btn.disabled = true;
+
+            let qty = 1;
+            if (purchaseType === 'crate') {
+                qty = parseInt(document.getElementById('quantityInput').value) || 1;
+            }
+
+            let consoleCommand = "";
+            let itemField = "";
+
+            if (purchaseType === 'rank') {
+                const groupName = selectedItem.toLowerCase().replace(/\s+/g, '');
+                consoleCommand = `lp user ${ign} parent addtemp ${groupName} ${durationMonths}mo`;
+                itemField = `**${selectedItem}**`;
+            } else if (purchaseType === 'crate') {
+                let crateName = "unknown";
+                let keysInBundle = 1;
+
+                if (selectedItem.includes("BASIC")) { crateName = "basic"; keysInBundle = 1; }
+                else if (selectedItem.includes("SPAWNER")) { crateName = "spawner"; keysInBundle = 2; }
+                else if (selectedItem.includes("INFINITY")) { crateName = "infinity"; keysInBundle = 3; }
+                else if (selectedItem.includes("CELESTIAL")) { crateName = "celestial"; keysInBundle = 4; }
+                else if (selectedItem.includes("COSMIC EMPEROR")) { crateName = "cosmicemperor"; keysInBundle = 6; }
+
+                let totalKeysToGive = keysInBundle * qty;
+                consoleCommand = `crate give ${ign} ${crateName} ${totalKeysToGive}`;
+                itemField = `**${qty}x [${selectedItem}]**\n*(Total Keys: ${totalKeysToGive})*`;
+            }
+
+            const formData = new FormData();
+            formData.append('files[0]', fileInput.files[0], 'screenshot.jpg');
+
+            const payload = {
+                embeds: [{
+                    title: "🛒 New Store Purchase Notification",
+                    color: 12616956,
+                    description: "A user has submitted a payment confirmation.",
+                    image: { url: "attachment://screenshot.jpg" }, 
+                    fields: [
+                        { name: "Minecraft IGN", value: `\`${ign}\``, inline: true },
+                        { name: "Discord ID", value: `**${discordId}**`, inline: true },
+                        { name: "Item", value: itemField, inline: true },
+                        { name: "Amount", value: `**₹${finalPrice}**`, inline: true },
+                        { name: "Paid To (UPI)", value: `\`${activeUpi}\``, inline: true },
+                        { name: "Transaction ID", value: `\`${trxId}\``, inline: true },
+                        { name: "Coupon", value: `\`${appliedCouponCode}\``, inline: true },
+                        { name: "Console Command (Copy/Paste)", value: `\`\`\`\n/${consoleCommand}\n\`\`\``, inline: false }
+                    ],
+                    footer: { text: "CelestialMc Automated Store" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            formData.append('payload_json', JSON.stringify(payload));
+
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    body: formData 
+                });
+
+                if (response.ok || response.status === 204) {
+                    alert(`Payment submitted successfully!\n\nYour screenshot has been sent to the staff team. We will verify your payment and contact you on Discord (${discordId}) shortly.`);
+                    
+                    document.getElementById('checkoutBox').classList.add('genie-out');
+                    setTimeout(() => {
+                        window.location.href = purchaseType === 'crate' ? "crates.html" : "store.html"; 
+                    }, 750);
+
+                } else {
+                    throw new Error('Network error');
+                }
+            } catch (error) {
+                alert("Error sending the notification. Please check your file size or contact staff directly on Discord.");
+                console.error(error);
+            } finally {
+                btn.textContent = "Confirm & Submit Payment";
+                btn.disabled = false;
+            }
+        }
+
+        window.onload = function() {
+            if (purchaseType === 'crate') {
+                document.getElementById('qtyGroup').style.display = 'block';
+            }
+            updateDisplay();
+        };
+    </script>
+</body>
+</html>
