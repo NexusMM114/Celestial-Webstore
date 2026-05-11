@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CelestrailMc • Official Rules</title>
-    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>CelestialMc • Official Rules</title>
+    
+    <!-- New Fonts: Outfit (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Minecraft Font -->
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
     
     <style>
-        /* --- 1. Core Variables & Setup --- */
         :root {
           --bg: #020617;
           --bg-accent: #0f172a;
@@ -20,7 +23,8 @@
           --alert-red: #ef4444; 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Space Grotesk", sans-serif; }
+        /* Set Outfit as the default body font */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Outfit", sans-serif; }
 
         body {
           background-color: var(--bg);
@@ -30,116 +34,56 @@
           min-height: 100vh;
         }
 
-        /* --- 2. Animations (Particles) --- */
+        .mc-font { font-family: 'Minecraft', sans-serif !important; letter-spacing: 2px; }
+
         .particle {
-          position: fixed;
-          top: -10%;
-          background-color: var(--primary-purple);
-          border-radius: 50%;
-          opacity: 0.3;
-          pointer-events: none;
-          z-index: 1;
+          position: fixed; top: -10%; background-color: var(--primary-purple);
+          border-radius: 50%; opacity: 0.3; pointer-events: none; z-index: 1;
           animation: fall linear infinite;
         }
-
         @keyframes fall {
           0% { transform: translateY(0vh) scale(0); opacity: 0.6; }
           50% { opacity: 0.4; }
           100% { transform: translateY(100vh) scale(1); opacity: 0; }
         }
 
-        /* --- 3. Typography & Navigation --- */
+        .app-container { transform-origin: bottom center; animation: genieIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; width: 100%; }
+        .genie-out { animation: genieOut 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important; }
+
+        @keyframes genieIn {
+            0% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
+            100% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
+        }
+        @keyframes genieOut {
+            0% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
+            100% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
+        }
+
         .purple-gradient {
           background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 800;
+          -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;
         }
 
-        .page-nav {
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          display: flex;
-          gap: 10px;
-          z-index: 999;
-        }
+        .page-nav { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 999; }
+        .page-nav a { padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 700; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-size: 0.85rem; transition: 0.3s; }
+        .page-nav a:hover { border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); }
+        .page-nav .active { background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple)); color: #fff; border: none; box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); }
 
-        .page-nav a {
-          padding: 10px 20px;
-          border-radius: 12px;
-          text-decoration: none;
-          font-weight: 700;
-          color: var(--text);
-          background: var(--glass);
-          border: 1px solid var(--border);
-          backdrop-filter: blur(10px);
-          font-size: 0.75rem;
-          transition: 0.3s;
-        }
-
-        .page-nav .active {
-          background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
-          color: #fff;
-          border: none;
-          box-shadow: 0 0 15px rgba(192, 132, 252, 0.3);
-        }
-
-        /* --- 4. Content Containers --- */
         section { padding: 120px 10% 60px; max-width: 1000px; margin: 0 auto; position: relative; z-index: 2; }
         
-        .rule-container {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border);
-          padding: 40px;
-          border-radius: 2rem;
-          backdrop-filter: blur(15px);
-          margin-bottom: 30px;
-          transition: 0.4s;
-        }
+        .rule-container { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); padding: 40px; border-radius: 2rem; backdrop-filter: blur(15px); margin-bottom: 30px; transition: 0.4s; }
+        .rule-container:hover { border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); }
 
-        .rule-container:hover {
-          border-color: var(--primary-purple);
-          background: rgba(192, 132, 252, 0.05);
-          transform: translateY(-5px);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .rule-title {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            font-weight: 800;
-        }
+        .rule-title { display: flex; align-items: center; gap: 15px; font-size: 1.5rem; margin-bottom: 20px; font-weight: 800; }
 
         ul { list-style: none; }
-        li { 
-            margin-bottom: 12px; 
-            padding-left: 25px; 
-            position: relative; 
-            color: var(--muted);
-        }
-        li::before {
-            content: "➜";
-            position: absolute;
-            left: 0;
-            color: var(--primary-purple);
-        }
+        li { margin-bottom: 12px; padding-left: 25px; position: relative; color: var(--muted); font-size: 1.05rem;}
+        li::before { content: "➜"; position: absolute; left: 0; color: var(--primary-purple); }
 
-        /* --- 5. Punishment Table --- */
-        .comparison-wrapper {
-          overflow-x: auto;
-          border-radius: 1rem;
-          background: rgba(0, 0, 0, 0.3);
-          border: 1px solid var(--border);
-          margin-top: 20px;
-        }
-
+        .comparison-wrapper { overflow-x: auto; border-radius: 1rem; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 20px; border-bottom: 1px solid var(--border); }
-        th { color: var(--primary-purple); font-weight: 800; text-transform: uppercase; font-size: 0.85rem; }
+        th { color: var(--primary-purple); font-weight: 800; text-transform: uppercase; font-size: 0.9rem; }
         
         .text-alert { color: var(--alert-red); font-weight: 600; }
         .text-warn { color: var(--primary-purple); font-weight: 600; }
@@ -149,88 +93,91 @@
 </head>
 <body>
 
-   <nav class="page-nav">
-    <a href="index.html">HOME</a>
-    <a href="rules.html" class="active">RULES</a>
-    <a href="store.html">STORE</a>
-    <a href="crates.html">CRATES</a>
-</nav>
+    <nav class="page-nav">
+        <a href="#" onclick="navigate(event, 'index.html')">HOME</a>
+        <a href="#" onclick="navigate(event, 'rules.html')" class="active">RULES</a>
+        <a href="#" onclick="navigate(event, 'store.html')">RANKS</a>
+        <a href="#" onclick="navigate(event, 'crates.html')">CRATES</a>
+    </nav>
 
-    <section>
-        <div style="text-align: center; margin-bottom: 60px;">
-            <h1 class="purple-gradient" style="font-size: 3.5rem; font-weight: 900;">✦ CelestrailMc Rules</h1>
-            <p style="color: var(--primary-purple); font-style: italic; margin-top: 10px;">A premium survival experience needs clear rules. Read carefully.</p>
-        </div>
-
-        <div class="rule-container">
-            <div class="rule-title"><span class="purple-gradient">✦</span> Agreement Notice</div>
-            <p style="color: var(--muted);">By joining, playing, or participating in <b class="purple-gradient">CelestrailMc</b>, you automatically agree to follow all rules listed on this page. Ignorance is not an excuse. Staff decisions are final.</p>
-        </div>
-
-        <div class="rule-container">
-            <div class="rule-title"><span class="purple-gradient">❖</span> General Conduct</div>
-            <ul>
-                <li>Treat all players and staff with respect.</li>
-                <li>No NSFW content, hate speech, or harassment.</li>
-                <li>No spamming, advertising, or self-promotion.</li>
-                <li>Respect privacy and personal information.</li>
-            </ul>
-        </div>
-
-        <div class="rule-container">
-            <div class="rule-title"><span class="purple-gradient">⟡</span> SMP Gameplay Rules</div>
-            <ul>
-                <li>No cheating, hacking, or exploiting bugs.</li>
-                <li>No griefing, stealing, or scamming.</li>
-                <li>PvP must be fair and mutual.</li>
-                <li>Respect community builds and claims.</li>
-            </ul>
-        </div>
-
-        <div class="rule-container" style="border-color: rgba(239, 68, 68, 0.3);">
-            <div class="rule-title"><span class="text-alert">⚑</span> Punishment Severity</div>
-            <div class="comparison-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Violation</th>
-                            <th>First Offense</th>
-                            <th>Repeat</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Spam / Minor Abuse</td>
-                            <td class="text-warn">Warn</td>
-                            <td class="text-warn">Mute</td>
-                        </tr>
-                        <tr>
-                            <td>Harassment / Toxicity</td>
-                            <td class="text-warn">Mute</td>
-                            <td class="text-alert">Temp Ban</td>
-                        </tr>
-                        <tr>
-                            <td>Cheating / Exploits</td>
-                            <td class="text-alert">Temp Ban</td>
-                            <td class="text-alert">Permanent Ban</td>
-                        </tr>
-                        <tr>
-                            <td>Griefing</td>
-                            <td class="text-alert">Ban</td>
-                            <td class="text-alert">Permanent Ban</td>
-                        </tr>
-                    </tbody>
-                </table>
+    <main id="appContainer" class="app-container">
+        
+        <section>
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h1 class="purple-gradient mc-font" style="font-size: 3rem;">CelestialMc Rules</h1>
+                <p style="color: var(--primary-purple); font-style: italic; margin-top: 10px;">A premium survival experience needs clear rules. Read carefully.</p>
             </div>
-        </div>
-    </section>
 
-    <footer>
-        <p>&copy; 2026 CelestrailMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
-    </footer>
+            <div class="rule-container">
+                <div class="rule-title"><span class="purple-gradient">✦</span> Agreement Notice</div>
+                <p style="color: var(--muted); line-height: 1.6;">By joining, playing, or participating in <b class="purple-gradient">CelestialMc</b>, you automatically agree to follow all rules listed on this page. Ignorance is not an excuse. Staff decisions are final.</p>
+            </div>
+
+            <div class="rule-container">
+                <div class="rule-title"><span class="purple-gradient">❖</span> General Conduct</div>
+                <ul>
+                    <li>Treat all players and staff with respect.</li>
+                    <li>No NSFW content, hate speech, or harassment.</li>
+                    <li>No spamming, advertising, or self-promotion.</li>
+                    <li>Respect privacy and personal information.</li>
+                </ul>
+            </div>
+
+            <div class="rule-container">
+                <div class="rule-title"><span class="purple-gradient">⟡</span> SMP Gameplay Rules</div>
+                <ul>
+                    <li>No cheating, hacking, or exploiting bugs.</li>
+                    <li>No griefing, stealing, or scamming.</li>
+                    <li>PvP must be fair and mutual.</li>
+                    <li>Respect community builds and claims.</li>
+                </ul>
+            </div>
+
+            <div class="rule-container" style="border-color: rgba(239, 68, 68, 0.3);">
+                <div class="rule-title"><span class="text-alert">⚑</span> Punishment Severity</div>
+                <div class="comparison-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Violation</th>
+                                <th>First Offense</th>
+                                <th>Repeat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Spam / Minor Abuse</td>
+                                <td class="text-warn">Warn</td>
+                                <td class="text-warn">Mute</td>
+                            </tr>
+                            <tr>
+                                <td>Harassment / Toxicity</td>
+                                <td class="text-warn">Mute</td>
+                                <td class="text-alert">Temp Ban</td>
+                            </tr>
+                            <tr>
+                                <td>Cheating / Exploits</td>
+                                <td class="text-alert">Temp Ban</td>
+                                <td class="text-alert">Permanent Ban</td>
+                            </tr>
+                            <tr>
+                                <td>Griefing</td>
+                                <td class="text-alert">Ban</td>
+                                <td class="text-alert">Permanent Ban</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 CelestialMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
+        </footer>
+
+    </main>
 
     <script>
-        // Purple Particle Generator
         function createParticle() {
             const particle = document.createElement('div');
             particle.classList.add('particle');
@@ -240,12 +187,16 @@
             particle.style.height = size;
             particle.style.animationDuration = Math.random() * 4 + 3 + 's';
             document.body.appendChild(particle);
-
-            setTimeout(() => {
-                particle.remove();
-            }, 7000);
+            setTimeout(() => { particle.remove(); }, 7000);
         }
         setInterval(createParticle, 200);
+
+        function navigate(e, url) {
+            e.preventDefault(); 
+            if (url === 'rules.html' && window.location.pathname.endsWith('rules.html')) return; 
+            document.getElementById('appContainer').classList.add('genie-out');
+            setTimeout(() => { window.location.href = url; }, 750); 
+        }
     </script>
 </body>
 </html>
