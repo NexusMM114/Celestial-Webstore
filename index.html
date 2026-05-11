@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CelestrailMc • New Era of LifeSteal</title>
+    <title>CelestialMc • New Era of LifeSteal</title>
     
-    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- New Fonts: Outfit (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Minecraft Font (Titles) -->
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
 
     <style>
         /* --- 1. Core Variables & Setup --- */
@@ -20,11 +23,12 @@
           --muted: #94a3b8;
         }
 
+        /* Default Font to Outfit */
         * {
           margin: 0;
           padding: 0;
           box-sizing: border-box;
-          font-family: "Space Grotesk", sans-serif;
+          font-family: "Outfit", sans-serif;
         }
 
         body {
@@ -33,6 +37,13 @@
           color: var(--text);
           overflow-x: hidden;
           min-height: 100vh;
+        }
+
+        /* Custom Font Class for Minecraft Text */
+        .mc-font {
+            font-family: 'Minecraft', sans-serif !important;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         /* --- 2. Animations --- */
@@ -57,6 +68,27 @@
           0% { transform: translateY(0vh) scale(0); opacity: 0.6; }
           50% { opacity: 0.4; }
           100% { transform: translateY(100vh) scale(1); opacity: 0; }
+        }
+
+        /* --- MAC OS GENIE EFFECT ANIMATIONS --- */
+        .app-container {
+            transform-origin: bottom center; 
+            animation: genieIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            width: 100%;
+        }
+
+        .genie-out {
+            animation: genieOut 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
+        }
+
+        @keyframes genieIn {
+            0% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
+            100% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
+        }
+
+        @keyframes genieOut {
+            0% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
+            100% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
         }
 
         /* --- 3. Typography & Gradients --- */
@@ -88,8 +120,12 @@
           background: var(--glass);
           border: 1px solid var(--border);
           backdrop-filter: blur(10px);
-          font-size: 0.75rem;
+          font-size: 0.85rem;
           transition: 0.3s;
+        }
+
+        .page-nav a:hover {
+            border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05);
         }
 
         .page-nav .active {
@@ -115,86 +151,117 @@
             max-width: 90%;
             height: auto;
             margin-bottom: 20px;
-            /* Purple shadow and a slight glow effect */
             filter: drop-shadow(0 15px 15px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 30px rgba(192, 132, 252, 0.4));
             animation: float 6s ease-in-out infinite; 
         }
 
-        /* --- 6. The Matrix Card System --- */
+        /* --- 6. The 3D Flip Card System --- */
         section { padding: 80px 10%; position: relative; z-index: 2; }
         .title { text-align: center; font-size: 2.8rem; margin-bottom: 50px; }
 
         .grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 25px;
           justify-content: center;
         }
 
         .card {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid var(--border);
-          padding: 40px 30px;
-          border-radius: 2rem;
-          backdrop-filter: blur(15px);
-          transition: 0.4s ease;
-          text-align: center;
+            background: transparent;
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+        .card:hover { transform: translateY(-10px); }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
         }
 
-        .card:hover {
-          transform: translateY(-10px);
-          border-color: var(--primary-purple);
-          background: rgba(192, 132, 252, 0.05);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        .card.flipped .card-inner { transform: rotateY(180deg); }
+
+        .card-front, .card-back {
+            width: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            padding: 40px 20px;
+            border-radius: 2rem;
+            backdrop-filter: blur(15px);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: box-shadow 0.4s ease, border-color 0.4s ease, background 0.4s ease;
         }
 
-        .card img {
+        .card:hover .card-front, .card:hover .card-back {
+            border-color: var(--primary-purple);
+            background: rgba(192, 132, 252, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-front { position: relative; }
+
+        .card-back {
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            transform: rotateY(180deg);
+            padding: 30px 20px;
+        }
+
+        .card-front img {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            margin: 0 auto 15px auto; /* Centers the image horizontally */
+            margin: 0 auto 15px auto;
             border: 3px solid var(--border);
             object-fit: cover;
-            display: block; /* Ensures the image sits alone on its line */
+            display: block;
+        }
+
+        .card-back p { font-size: 0.95rem; line-height: 1.6; color: var(--muted); margin-bottom: 15px; }
+
+        .flip-hint {
+            margin-top: auto; 
+            font-size: 0.75rem; 
+            color: var(--primary-purple); 
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
         /* --- 7. Buttons & Tiers --- */
         .btn-purple {
           background: linear-gradient(90deg, var(--secondary-purple), var(--primary-purple));
-          color: #fff;
-          font-weight: 800;
-          text-transform: uppercase;
-          border: none;
-          padding: 14px 30px;
-          border-radius: 12px;
-          cursor: pointer;
-          text-decoration: none;
-          display: inline-block;
-          transition: 0.3s;
-          font-size: 0.85rem;
-          letter-spacing: 1px;
+          color: #fff; font-weight: 800; text-transform: uppercase; border: none; padding: 14px 30px;
+          border-radius: 12px; cursor: pointer; text-decoration: none; display: inline-block;
+          transition: 0.3s; font-size: 0.9rem; letter-spacing: 1px;
         }
-
-        .btn-purple:hover {
-          filter: brightness(1.2);
-          box-shadow: 0 0 25px rgba(192, 132, 252, 0.5);
-        }
+        .btn-purple:hover { filter: brightness(1.2); box-shadow: 0 0 25px rgba(192, 132, 252, 0.5); }
 
         .role-pill {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 8px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
-            text-transform: uppercase;
+            display: inline-block; padding: 5px 15px; border-radius: 8px; font-size: 0.7rem;
+            font-weight: 800; margin-bottom: 12px; background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border); text-transform: uppercase;
         }
 
         .text-owner { color: #f8fafc; background: var(--secondary-purple); }
         .text-dev { color: var(--primary-purple); }
-        .text-mod { color: #22c55e; }
+        .text-ceo { color: #06b6d4; border-color: rgba(6, 182, 212, 0.5); } 
+        .text-mod { color: #fff; background: #3b82f6; border-color: #3b82f6; }
         .text-partner { color: #fbbf24; }
 
         footer { text-align: center; padding: 60px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; }
@@ -204,67 +271,129 @@
 <body>
 
     <nav class="page-nav">
-        <a href="index.html" class="active">HOME</a>
-        <a href="rules.html">RULES</a>
-        <a href="store.html">STORE</a>
-        <a href="crates.html">CRATES</a>
+        <a href="#" onclick="navigate(event, 'index.html')" class="active">HOME</a>
+        <a href="#" onclick="navigate(event, 'rules.html')">RULES</a>
+        <a href="#" onclick="navigate(event, 'store.html')">RANKS</a>
+        <a href="#" onclick="navigate(event, 'crates.html')">CRATES</a>
     </nav>
 
-    <header class="hero">
-        <img src="https://i.ibb.co/Y40tL1QM/file-00000000c02c720893f224de887d0b14.png" 
-             class="site-logo" 
-             alt="CelestrailMc Logo" 
-             border="0">
-        
-        <p class="italic" style="color: var(--primary-purple); font-size: 1.2rem; letter-spacing: 2px; margin-top: 20px;">
-            SURVIVAL REBORN • THE COLD FRONTIER
-        </p>
-        
-        <div style="margin-top: 40px;">
-            <p style="margin-bottom: 15px; font-weight: 700; color: #fff; font-size: 1.2rem;">🌐 play.celestialnet.fun:1477</p>
-            <a href="https://discord.gg/kZ9hzmPruR" target="_blank" class="btn-purple">Join the Discord</a>
-        </div>
-    </header>
+    <main id="appContainer" class="app-container">
 
-    <section id="staff">
-        <h2 class="title purple-gradient">Executive Team</h2>
-        <div class="grid">
-            <div class="card">
-                <img src="https://cdn.discordapp.com/attachments/1497642231493038120/1499627529768665268/df72ad25c547b7c37108240503587297.jpg?ex=69f57c78&is=69f42af8&hm=67d8e3b773a9f1d2b6c7e2018e1bfcaaa6d248313fdb68a8b53f19b9ea795199&" alt="TheAryan">
-                <div class="role-pill text-owner">OWNER</div>
-                <h3>TheAryan</h3>
-                <p style="color: var(--muted); margin-top: 10px;">The Project Owner</p>
+        <header class="hero">
+            <img src="https://i.ibb.co/Y40tL1QM/file-00000000c02c720893f224de887d0b14.png" 
+                 class="site-logo" 
+                 alt="CelestialMc Logo" 
+                 border="0">
+            
+            <p class="italic mc-font" style="color: var(--primary-purple); font-size: 1.2rem; margin-top: 20px;">
+                SURVIVAL REBORN • THE COLD FRONTIER
+            </p>
+            
+            <div style="margin-top: 40px;">
+                <p style="margin-bottom: 15px; font-weight: 700; color: #fff; font-size: 1.2rem;">🌐 play.celestialnet.fun:1477</p>
+                <a href="https://discord.gg/kZ9hzmPruR" target="_blank" class="btn-purple">Join the Discord</a>
             </div>
+        </header>
 
-            <div class="card">
-                <img src="https://cdn.discordapp.com/attachments/1497642231493038120/1499660949513306212/b12eaacd9de9906de658c926516a0e12.jpg?ex=69f59b98&is=69f44a18&hm=0a468178cd7aa3a037c458d6a55fa1307631b7d1c64ff93dc221b595557b1046&" alt="Kakashi">
-                <div class="role-pill text-dev">DEVELOPER</div>
-                <h3>Kakashi</h3>
-                <p style="color: var(--muted); margin-top: 10px;">Lead Systems Engineer</p>
+        <section id="staff">
+            <h2 class="title purple-gradient mc-font">Executive Team</h2>
+            <div class="grid">
+                
+                <!-- TheAryan Card -->
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://cdn.discordapp.com/attachments/1497642231493038120/1499627529768665268/df72ad25c547b7c37108240503587297.jpg?ex=69f57c78&is=69f42af8&hm=67d8e3b773a9f1d2b6c7e2018e1bfcaaa6d248313fdb68a8b53f19b9ea795199&" alt="TheAryan">
+                            <div class="role-pill text-owner">OWNER</div>
+                            <h3 class="mc-font">TheAryan</h3>
+                            <p style="color: var(--muted); margin-top: 10px;">The Project Owner</p>
+                        </div>
+                        <div class="card-back">
+                            <h3 class="purple-gradient mc-font" style="margin-bottom: 15px; font-size: 1.2rem;">Behind the Scenes</h3>
+                            <p>Leading CelestialMc into a new era. The mastermind focusing on community growth, project vision, and our overall server infrastructure.</p>
+                            <span class="flip-hint">Click to flip back</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kakashi Card -->
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://cdn.discordapp.com/attachments/1497642231493038120/1499660949513306212/b12eaacd9de9906de658c926516a0e12.jpg?ex=69f59b98&is=69f44a18&hm=0a468178cd7aa3a037c458d6a55fa1307631b7d1c64ff93dc221b595557b1046&" alt="Kakashi">
+                            <div class="role-pill text-dev">DEVELOPER</div>
+                            <h3 class="mc-font">Kakashi</h3>
+                            <p style="color: var(--muted); margin-top: 10px;">Lead Systems Engineer</p>
+                        </div>
+                        <div class="card-back">
+                            <h3 class="purple-gradient mc-font" style="margin-bottom: 15px; font-size: 1.2rem;">Behind the Scenes</h3>
+                            <p>Writing the custom plugins and core gameplay systems that make CelestialMc unique. Fixing bugs before you even see them.</p>
+                            <span class="flip-hint">Click to flip back</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pawan Card -->
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://cdn.discordapp.com/avatars/1466073991457280255/b3dba2e81387db2d1e7e89af07b82824.png?size=1024" alt="Pawan">
+                            <div class="role-pill text-ceo">CEO</div>
+                            <h3 class="mc-font">Pawan</h3>
+                            <p style="color: var(--muted); margin-top: 10px;">Chief Executive Officer</p>
+                        </div>
+                        <div class="card-back">
+                            <h3 class="purple-gradient mc-font" style="margin-bottom: 15px; font-size: 1.2rem;">Behind the Scenes</h3>
+                            <p>The CEO of the server. Manages all payments, personally funds the server hosting operations, and ensures CelestialMc is always financially secure.</p>
+                            <span class="flip-hint">Click to flip back</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nexus Card -->
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://cdn.discordapp.com/avatars/1462124895868817484/245033fa77ad395c8fb50e70d42e4803.png?size=1024" alt="Nexus">
+                            <div class="role-pill text-mod">MANAGER</div>
+                            <h3 class="mc-font">Nexus</h3>
+                            <p style="color: var(--muted); margin-top: 10px;">Community Manager & Developer</p>
+                        </div>
+                        <div class="card-back">
+                            <h3 class="purple-gradient mc-font" style="margin-bottom: 15px; font-size: 1.2rem;">Behind the Scenes</h3>
+                            <p>The bridge between the community and the dev team. Handling events, staff management, support tickets, and front-end design.</p>
+                            <span class="flip-hint">Click to flip back</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sushant Card -->
+                <div class="card" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://cdn.discordapp.com/avatars/1155123550080999485/b7b79579bdc4c6132670448f7182ffae.png?size=1024" alt="Sushant">
+                            <div class="role-pill text-partner">HOSTING</div>
+                            <h3 class="mc-font" style="font-size: 1.2rem;">Sushant (Angara)</h3>
+                            <p style="color: var(--muted); margin-top: 10px;">HOSTING ANGARA</p>
+                        </div>
+                        <div class="card-back">
+                            <h3 class="purple-gradient mc-font" style="margin-bottom: 15px; font-size: 1.2rem;">Behind the Scenes</h3>
+                            <p>Providing the top-tier 'Angara' hosting backbone. Keeping latency low, bandwidth high, and ensuring server up-time.</p>
+                            <span class="flip-hint">Click to flip back</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </section>
 
-            <div class="card">
-                <img src="https://cdn.discordapp.com/attachments/1497181279232327752/1497273072644788224/discord_fake_avatar_decorations_1777048083084.gif?ex=69f57d76&is=69f42bf6&hm=b4ea6a4e9b21bcd802336329efd67746b6a5bfd4df0f00676cdc8244d2c98d92&" alt="Nexus">
-                <div class="role-pill text-mod">MANAGER</div>
-                <h3>Nexus</h3>
-                <p style="color: var(--muted); margin-top: 10px;">Community Manager & Developer</p>
-            </div>
+        <footer>
+            <p>&copy; 2026 CelestialMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
+        </footer>
 
-            <div class="card">
-                <img src="https://cdn.discordapp.com/avatars/1155123550080999485/b7b79579bdc4c6132670448f7182ffae.png?size=1024" alt="Sushant">
-                <div class="role-pill text-partner">HOSTING</div>
-                <h3>Sushant (Angara)</h3>
-                <p style="color: var(--muted); margin-top: 10px;">HOSTING ANGARA</p>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 CelestrailMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
-    </footer>
+    </main>
 
     <script>
-        // Purple Particle Generator
         function createParticle() {
             const particle = document.createElement('div');
             particle.classList.add('particle');
@@ -280,6 +409,20 @@
             }, 7000);
         }
         setInterval(createParticle, 200);
+
+        function navigate(e, url) {
+            e.preventDefault(); 
+            
+            if (url === 'index.html' && window.location.pathname.endsWith('index.html')) {
+                return; 
+            }
+
+            document.getElementById('appContainer').classList.add('genie-out');
+            
+            setTimeout(() => {
+                window.location.href = url;
+            }, 750); 
+        }
     </script>
 </body>
 </html>
