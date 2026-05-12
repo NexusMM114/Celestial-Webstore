@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CelestialMc • Rank Store</title>
-    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- New Fonts: Outfit (Body), Russo One (Pricing) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <!-- Minecraft Font (Titles & Lever) -->
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
     
     <style>
         /* --- 1. Core Variables & Setup --- */
@@ -18,9 +22,11 @@
           --text: #f8fafc;
           --muted: #94a3b8;
           --alert-red: #ef4444; 
+          --item-bg: rgba(0, 0, 0, 0.4);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Space Grotesk", sans-serif; }
+        /* Default Font to Outfit */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Outfit", sans-serif; }
 
         body {
           background-color: var(--bg);
@@ -28,6 +34,18 @@
           color: var(--text);
           overflow-x: hidden;
           min-height: 100vh;
+        }
+
+        /* --- Font Classes --- */
+        .mc-font {
+            font-family: 'Minecraft', sans-serif !important;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .price-font {
+            font-family: 'Russo One', sans-serif !important;
+            letter-spacing: 1px;
         }
 
         /* --- 2. Animations (Particles) --- */
@@ -48,6 +66,27 @@
           100% { transform: translateY(100vh) scale(1); opacity: 0; }
         }
 
+        /* --- MAC OS GENIE EFFECT ANIMATIONS --- */
+        .app-container {
+            transform-origin: bottom center; 
+            animation: genieIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            width: 100%;
+        }
+
+        .genie-out {
+            animation: genieOut 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
+        }
+
+        @keyframes genieIn {
+            0% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
+            100% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
+        }
+
+        @keyframes genieOut {
+            0% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
+            100% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
+        }
+
         /* --- 3. Typography & Gradients --- */
         .purple-gradient {
           background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
@@ -56,37 +95,96 @@
           font-weight: 800;
         }
 
-        .section-title { text-align: center; font-size: 2.5rem; font-weight: 900; margin-top: 60px; margin-bottom: 10px; position: relative; z-index: 2; }
+        .section-title { text-align: center; font-size: 2.8rem; margin-top: 60px; margin-bottom: 5px; position: relative; z-index: 2; }
 
         /* --- 4. Navigation & Back Button --- */
         .page-nav { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 999; }
-        .page-nav a { padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 700; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-size: 0.75rem; transition: 0.3s; }
-        .page-nav .active { background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple)); color: #fff; border: none; box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
+        .page-nav a { padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 700; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-size: 0.85rem; transition: 0.3s; }
+        .page-nav a:hover { border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); }
+        .page-nav .active { background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple)); color: #fff; border: none; box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); }
 
-        .back-btn { position: fixed; top: 20px; left: 20px; z-index: 999; padding: 10px 20px; border-radius: 12px; text-decoration: none; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-weight: 700; font-size: 0.75rem; transition: 0.3s; }
+        .back-btn { position: fixed; top: 20px; left: 20px; z-index: 999; padding: 10px 20px; border-radius: 12px; text-decoration: none; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-weight: 700; font-size: 0.85rem; transition: 0.3s; cursor: pointer; }
         .back-btn:hover { border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); }
 
-        /* --- 5. Billing Toggle --- */
-        .billing-toggle { margin: 20px auto 40px; width: 100%; max-width: 450px; display: flex; background: var(--glass); border: 1px solid var(--border); border-radius: 12px; padding: 5px; position: relative; z-index: 2; }
-        .billing-toggle button { flex: 1; padding: 12px 0; border: none; background: none; font-weight: 800; color: var(--muted); cursor: pointer; transition: 0.3s; border-radius: 8px; }
-        .billing-toggle button.active { background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple)); color: #fff; box-shadow: 0 0 10px rgba(192, 132, 252, 0.4); }
+        /* --- 5. MINECRAFT LEVER (BILLING TOGGLE) --- */
+        .mc-lever-wrapper {
+            margin: 20px auto 40px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .mc-lever-track {
+            width: 160px; 
+            height: 38px;
+            background: #111111; 
+            border: 3px solid #2a2a2a;
+            border-bottom-color: #444444;
+            border-right-color: #444444;
+            display: flex;
+            position: relative;
+            margin: 0 auto 12px auto;
+            box-shadow: inset 0 5px 10px rgba(0,0,0,0.8);
+        }
+
+        .mc-lever-thumb {
+            position: absolute;
+            top: -4px;
+            left: 0%; 
+            width: 33.33%;
+            height: calc(100% + 8px);
+            background: #8e6844; 
+            border: 3px solid #b3885f;
+            border-bottom-color: #5e4125;
+            border-right-color: #5e4125;
+            transition: left 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.6);
+        }
+
+        .mc-lever-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+            z-index: 2;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .mc-lever-btn.active {
+            color: #ffffff;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.8);
+        }
+
+        .mc-lever-label {
+            color: var(--primary-purple);
+            font-size: 0.9rem;
+            text-shadow: 0 4px 10px rgba(192, 132, 252, 0.3);
+        }
 
         /* --- 6. Rank Cards --- */
-        .rank-grid { padding: 20px 8% 80px; display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); position: relative; z-index: 2; }
+        .rank-grid { padding: 10px 8% 80px; display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); position: relative; z-index: 2; }
         .rank-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); padding: 45px 35px; border-radius: 2rem; backdrop-filter: blur(15px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; position: relative; }
         .rank-card:hover { transform: translateY(-12px); border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
-        .rank-card h3 { font-size: 2rem; font-weight: 900; text-align: center; }
-        .price { font-size: 2.2rem; font-weight: 900; text-align: center; margin: 15px 0; color: var(--primary-purple); }
+        
+        .rank-card h3 { font-size: 2rem; text-align: center; text-shadow: 0 5px 10px rgba(0,0,0,0.5); }
+        .price { font-size: 2.8rem; text-align: center; margin: 15px 0; color: var(--primary-purple); }
+        
         .rank-card ul { list-style: none; margin: 20px 0; flex-grow: 1; }
-        .rank-card li { margin-bottom: 12px; color: var(--muted); font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+        .rank-card li { margin-bottom: 12px; color: var(--muted); font-size: 1.05rem; display: flex; align-items: center; gap: 10px; }
         .rank-card li::before { content: "➜"; font-size: 0.8rem; color: var(--primary-purple); font-weight: bold; }
-        .cmd { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 1rem; font-size: 0.8rem; color: var(--text); margin-bottom: 25px; border: 1px solid var(--border); text-align: center; font-weight: 600; }
+        .cmd { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 1rem; font-size: 0.85rem; color: var(--text); margin-bottom: 25px; border: 1px solid var(--border); text-align: center; font-weight: 600; }
 
         /* --- 7. Buttons & Tiers --- */
-        .btn-purple { background: linear-gradient(90deg, var(--secondary-purple), var(--primary-purple)); color: #fff; font-weight: 900; text-transform: uppercase; border: none; padding: 16px; border-radius: 12px; text-decoration: none; text-align: center; transition: 0.3s; font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; width: 100%; display: inline-block; }
+        .btn-purple { background: linear-gradient(90deg, var(--secondary-purple), var(--primary-purple)); color: #fff; font-weight: 800; text-transform: uppercase; border: none; padding: 16px; border-radius: 12px; text-decoration: none; text-align: center; transition: 0.3s; font-size: 0.9rem; letter-spacing: 1px; cursor: pointer; width: 100%; display: inline-block; }
         .btn-purple:hover { filter: brightness(1.2); box-shadow: 0 0 25px rgba(192, 132, 252, 0.6); transform: translateY(-2px); }
 
-        .badge { position: absolute; top: 25px; right: 25px; background: var(--primary-purple); color: #fff; padding: 5px 15px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; }
+        .btn-preview { background: var(--glass); border: 1px solid var(--primary-purple); color: var(--primary-purple); font-weight: 800; text-transform: uppercase; padding: 12px; border-radius: 12px; cursor: pointer; width: 100%; margin-bottom: 10px; transition: 0.3s; font-size: 0.85rem; letter-spacing: 1px;}
+        .btn-preview:hover { background: rgba(192, 132, 252, 0.15); box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); color: #fff;}
+
+        .badge { position: absolute; top: 25px; right: 25px; background: var(--primary-purple); color: #fff; padding: 5px 15px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
 
         /* Custom Colors */
         .text-orbit { color: #e2e8f0; } 
@@ -95,113 +193,203 @@
         .text-supernova { color: #d946ef; } 
         .text-celestial { color: var(--alert-red); text-shadow: 0 0 10px rgba(239, 68, 68, 0.3); } 
 
+        /* --- 8. PREVIEW MODAL WITH LOADER --- */
+        .kit-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 6, 23, 0.85); backdrop-filter: blur(10px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 9999; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .kit-modal-overlay.active { display: flex; opacity: 1; }
+
+        .kit-modal-box {
+            background: var(--bg-accent); border: 1px solid var(--border);
+            padding: 40px; border-radius: 24px; width: 90%; max-width: 800px;
+            position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            transform: scale(0.8) translateY(50px); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-height: 85vh; overflow-y: auto; text-align: center;
+        }
+        .kit-modal-overlay.active .kit-modal-box { transform: scale(1) translateY(0); }
+
+        .kit-close-btn {
+            position: absolute; top: 20px; right: 25px; font-size: 2rem;
+            color: var(--muted); cursor: pointer; transition: 0.2s; font-weight: bold; line-height: 1; z-index: 10;
+        }
+        .kit-close-btn:hover { color: var(--alert-red); transform: scale(1.1); }
+
+        /* CSS Reload Circle */
+        .loader-wrapper {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            padding: 60px 0; gap: 20px;
+        }
+        .reload-circle {
+            width: 50px; height: 50px;
+            border: 4px solid var(--glass);
+            border-top: 4px solid var(--primary-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* The actual image */
+        .kit-preview-img {
+            max-width: 100%; height: auto; border-radius: 12px;
+            border: 2px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none; margin: 20px auto 0 auto;
+            animation: fadeIn 0.8s ease forwards;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         footer { text-align: center; padding: 60px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; position: relative; z-index: 2; }
     </style>
 </head>
 
 <body>
 
-    <a href="index.html" class="back-btn">← BACK</a>
+    <a href="#" class="back-btn" onclick="navigate(event, 'index.html')">← BACK</a>
 
     <nav class="page-nav">
-        <a href="index.html">HOME</a>
-        <a href="rules.html">RULES</a>
-        <a href="store.html" class="active">STORE</a>
-        <a href="crates.html">CRATES</a>
+        <a href="#" onclick="navigate(event, 'index.html')">HOME</a>
+        <a href="#" onclick="navigate(event, 'rules.html')">RULES</a>
+        <a href="#" onclick="navigate(event, 'store.html')" class="active">RANKS</a>
+        <a href="#" onclick="navigate(event, 'crates.html')">CRATES</a>
     </nav>
 
-    <header style="text-align: center; padding: 120px 20px 0px; position: relative; z-index: 2;">
-        <h1 class="purple-gradient section-title">Donator Ranks</h1>
-        <p style="color: var(--primary-purple); font-style: italic;">Select duration • Prices update automatically</p>
-    </header>
+    <!-- Wrap page content in App Container -->
+    <main id="appContainer" class="app-container">
 
-    <div class="billing-toggle">
-        <button class="active" onclick="setDuration(1, this)">1 Month</button>
-        <button onclick="setDuration(2, this)">2 Months</button>
-        <button onclick="setDuration(3, this)">3 Months</button>
+        <header style="text-align: center; padding: 120px 20px 0px; position: relative; z-index: 2;">
+            <h1 class="purple-gradient section-title mc-font">Donator Ranks</h1>
+        </header>
+
+        <!-- MINECRAFT LEVER SYSTEM -->
+        <div class="mc-lever-wrapper">
+            <div class="mc-lever-track">
+                <!-- The physical wooden thumb that slides -->
+                <div class="mc-lever-thumb" id="leverThumb"></div>
+                <!-- The invisible trigger buttons -->
+                <button class="mc-lever-btn mc-font active" onclick="setDuration(1, this, 0)">1M</button>
+                <button class="mc-lever-btn mc-font" onclick="setDuration(2, this, 1)">2M</button>
+                <button class="mc-lever-btn mc-font" onclick="setDuration(3, this, 2)">3M</button>
+            </div>
+            <!-- Dynamic Label -->
+            <div class="mc-lever-label mc-font" id="leverLabel">1 MONTH DURATION</div>
+        </div>
+
+        <section class="rank-grid">
+            <!-- ORBIT RANK -->
+            <div class="rank-card">
+                <h3 class="mc-font text-orbit">ORBIT</h3>
+                <!-- Russo One applied to price here -->
+                <span class="price price-font" data-base="99" style="color: #e2e8f0;">₹99</span>
+                <ul>
+                    <li>Full Diamond Prot 4 Armor + Tools</li>
+                    <li>2× Homes allowed</li>
+                    <li>2× Personal Vaults</li>
+                    <li>10,000 IGM (In-Game Money)</li>
+                    <li>50× Store Coins</li>
+                </ul>
+                <p class="cmd">Includes Custom [Orbit] Chat Tag</p>
+                <button class="btn-preview" onclick="openKitPreview('ORBIT')">Preview Kit Contents</button>
+                <button class="btn-purple" onclick="goToPayment('ORBIT', 99, 'rank')">Buy Now</button>
+            </div>
+
+            <!-- NOVA RANK -->
+            <div class="rank-card">
+                <h3 class="mc-font text-nova">NOVA</h3>
+                <span class="price price-font" data-base="199" style="color: #3b82f6;">₹199</span>
+                <ul>
+                    <li>Full Netherite Prot 4 Armor + Tools</li>
+                    <li>3× Homes allowed</li>
+                    <li>3× Personal Vaults</li>
+                    <li>20,000 IGM (In-Game Money)</li>
+                    <li>100× Store Coins</li>
+                </ul>
+                <p class="cmd" style="color: #3b82f6; border-color: rgba(59, 130, 246, 0.3);">Includes Custom [Nova] Chat Tag</p>
+                <button class="btn-preview" onclick="openKitPreview('NOVA')">Preview Kit Contents</button>
+                <button class="btn-purple" onclick="goToPayment('NOVA', 199, 'rank')">Buy Now</button>
+            </div>
+
+            <!-- AURORA RANK -->
+            <div class="rank-card">
+                <h3 class="mc-font text-aurora">AURORA</h3>
+                <span class="price price-font" data-base="299">₹299</span>
+                <ul>
+                    <li>Full Netherite Prot 5 Armor + Tools</li>
+                    <li>4× Homes allowed</li>
+                    <li>4× Personal Vaults</li>
+                    <li>30,000 IGM (In-Game Money)</li>
+                    <li>150× Store Coins</li>
+                </ul>
+                <p class="cmd" style="color: var(--primary-purple); border-color: var(--border);">Includes Custom [Aurora] Chat Tag</p>
+                <button class="btn-preview" onclick="openKitPreview('AURORA')">Preview Kit Contents</button>
+                <button class="btn-purple" onclick="goToPayment('AURORA', 299, 'rank')">Buy Now</button>
+            </div>
+
+            <!-- SUPERNOVA RANK -->
+            <div class="rank-card">
+                <h3 class="mc-font text-supernova">SUPERNOVA</h3>
+                <span class="price price-font" data-base="399" style="color: #d946ef;">₹399</span>
+                <ul>
+                    <li>Full Netherite Prot 6 Armor + Tools</li>
+                    <li>5× Homes allowed</li>
+                    <li>5× Personal Vaults</li>
+                    <li>40,000 IGM (In-Game Money)</li>
+                    <li>200× Store Coins</li>
+                </ul>
+                <p class="cmd" style="color: #d946ef; border-color: rgba(217, 70, 239, 0.3);">Includes Custom [Supernova] Chat Tag</p>
+                <button class="btn-preview" onclick="openKitPreview('SUPERNOVA')">Preview Kit Contents</button>
+                <button class="btn-purple" onclick="goToPayment('SUPERNOVA', 399, 'rank')">Buy Now</button>
+            </div>
+
+            <!-- CELESTIAL KING RANK -->
+            <div class="rank-card" style="border-color: var(--alert-red);">
+                <div class="badge" style="background: var(--alert-red); color: #fff;">MAX TIER</div>
+                <h3 class="mc-font text-celestial" style="font-size: 1.6rem;">CELESTIAL KING</h3>
+                <span class="price price-font" data-base="499" style="color: var(--alert-red);">₹499</span>
+                <ul>
+                    <li>Full Max Prot 8 Armor + Tools</li>
+                    <li>5× Homes allowed</li>
+                    <li>5× Personal Vaults</li>
+                    <li>50,000 IGM (In-Game Money)</li>
+                    <li>250× Store Coins</li>
+                    <li style="color: #fff; font-weight: bold;">Global /fly Command Access</li>
+                </ul>
+                <p class="cmd" style="color: var(--alert-red); border-color: rgba(239, 68, 68, 0.3);">Includes Custom [Celestial King] Chat Tag</p>
+                <button class="btn-preview" onclick="openKitPreview('CELESTIAL KING')">Preview Kit Contents</button>
+                <button class="btn-purple" onclick="goToPayment('CELESTIAL KING', 499, 'rank')" style="background: linear-gradient(90deg, #b91c1c, #ef4444); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);">Buy Now</button>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2026 CelestialMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
+        </footer>
+
+    </main>
+
+    <!-- KIT PREVIEW MODAL WITH LOADER -->
+    <div id="kitModal" class="kit-modal-overlay">
+        <div class="kit-modal-box">
+            <span class="kit-close-btn" onclick="closeKitPreview()">&times;</span>
+            <h2 style="font-size: 2.2rem; margin-bottom: 5px;">Kit Preview: <span class="purple-gradient mc-font" id="kitTitle">Rank Name</span></h2>
+            <p style="color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 15px;">Items received upon rank redemption & kit claim.</p>
+            
+            <!-- Loading Circle -->
+            <div id="loader" class="loader-wrapper">
+                <div class="reload-circle"></div>
+                <p style="color: var(--muted); font-weight: 700;">Fetching secure image data...</p>
+            </div>
+
+            <!-- Target Image -->
+            <img id="previewImg" class="kit-preview-img" src="" alt="Kit Preview">
+            
+        </div>
     </div>
-
-    <section class="rank-grid">
-        <div class="rank-card">
-            <h3 class="text-orbit">ORBIT</h3>
-            <span class="price" data-base="99" style="color: #e2e8f0;">₹99</span>
-            <ul>
-                <li>Full Diamond Prot 4 Armor + Tools</li>
-                <li>2× Homes allowed</li>
-                <li>2× Personal Vaults</li>
-                <li>10,000 IGM (In-Game Money)</li>
-                <li>50× Store Coins</li>
-            </ul>
-            <p class="cmd">Includes Custom [Orbit] Chat Tag</p>
-            <button class="btn-purple" onclick="goToPayment('ORBIT', 99, 'rank')">Buy Now</button>
-        </div>
-
-        <div class="rank-card">
-            <h3 class="text-nova">NOVA</h3>
-            <span class="price" data-base="199" style="color: #3b82f6;">₹199</span>
-            <ul>
-                <li>Full Netherite Prot 4 Armor + Tools</li>
-                <li>3× Homes allowed</li>
-                <li>3× Personal Vaults</li>
-                <li>20,000 IGM (In-Game Money)</li>
-                <li>100× Store Coins</li>
-            </ul>
-            <p class="cmd" style="color: #3b82f6; border-color: rgba(59, 130, 246, 0.3);">Includes Custom [Nova] Chat Tag</p>
-            <button class="btn-purple" onclick="goToPayment('NOVA', 199, 'rank')">Buy Now</button>
-        </div>
-
-        <div class="rank-card">
-            <h3 class="text-aurora">AURORA</h3>
-            <span class="price" data-base="299">₹299</span>
-            <ul>
-                <li>Full Netherite Prot 5 Armor + Tools</li>
-                <li>4× Homes allowed</li>
-                <li>4× Personal Vaults</li>
-                <li>30,000 IGM (In-Game Money)</li>
-                <li>150× Store Coins</li>
-            </ul>
-            <p class="cmd" style="color: var(--primary-purple); border-color: var(--border);">Includes Custom [Aurora] Chat Tag</p>
-            <button class="btn-purple" onclick="goToPayment('AURORA', 299, 'rank')">Buy Now</button>
-        </div>
-
-        <div class="rank-card">
-            <h3 class="text-supernova">SUPERNOVA</h3>
-            <span class="price" data-base="399" style="color: #d946ef;">₹399</span>
-            <ul>
-                <li>Full Netherite Prot 6 Armor + Tools</li>
-                <li>5× Homes allowed</li>
-                <li>5× Personal Vaults</li>
-                <li>40,000 IGM (In-Game Money)</li>
-                <li>200× Store Coins</li>
-            </ul>
-            <p class="cmd" style="color: #d946ef; border-color: rgba(217, 70, 239, 0.3);">Includes Custom [Supernova] Chat Tag</p>
-            <button class="btn-purple" onclick="goToPayment('SUPERNOVA', 399, 'rank')">Buy Now</button>
-        </div>
-
-        <div class="rank-card" style="border-color: var(--alert-red);">
-            <div class="badge" style="background: var(--alert-red); color: #fff;">MAX TIER</div>
-            <h3 class="text-celestial">CELESTIAL KING</h3>
-            <span class="price" data-base="499" style="color: var(--alert-red);">₹499</span>
-            <ul>
-                <li>Full Max Prot 8 Armor + Tools</li>
-                <li>5× Homes allowed</li>
-                <li>5× Personal Vaults</li>
-                <li>50,000 IGM (In-Game Money)</li>
-                <li>250× Store Coins</li>
-                <li style="color: #fff; font-weight: bold;">Global /fly Command Access</li>
-            </ul>
-            <p class="cmd" style="color: var(--alert-red); border-color: rgba(239, 68, 68, 0.3);">Includes Custom [Celestial King] Chat Tag</p>
-            <button class="btn-purple" onclick="goToPayment('CELESTIAL KING', 499, 'rank')" style="background: linear-gradient(90deg, #b91c1c, #ef4444); box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);">Buy Now</button>
-        </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 CelestialMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
-    </footer>
 
     <script>
         let currentDurationMonths = 1;
 
+        // Particle Effect
         function createParticle() {
             const particle = document.createElement('div');
             particle.classList.add('particle');
@@ -215,20 +403,77 @@
         }
         setInterval(createParticle, 200);
 
-        function setDuration(months, btn) {
+        // --- Triggers Mac Minimize Animation on Navigation ---
+        function navigate(e, url) {
+            e.preventDefault(); 
+            if (url === 'store.html' && window.location.pathname.endsWith('store.html')) return; 
+            document.getElementById('appContainer').classList.add('genie-out');
+            setTimeout(() => { window.location.href = url; }, 750); 
+        }
+
+        // --- Minecraft Lever Billing Logic ---
+        function setDuration(months, btn, positionIndex) {
             currentDurationMonths = months;
-            document.querySelectorAll(".billing-toggle button").forEach(b => b.classList.remove("active"));
+            
+            // 1. Update Buttons Styling
+            document.querySelectorAll(".mc-lever-btn").forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
             
+            // 2. Slide the Physical Thumb Lever
+            const thumb = document.getElementById("leverThumb");
+            thumb.style.left = `calc(${positionIndex * 33.33}%)`;
+            
+            // 3. Update the Label below the lever
+            const labelText = months === 1 ? "1 MONTH DURATION" : `${months} MONTHS DURATION`;
+            document.getElementById("leverLabel").textContent = labelText;
+
+            // 4. Update the Prices mathematically
             document.querySelectorAll(".price").forEach(p => {
                 const base = parseInt(p.dataset.base);
                 p.textContent = "₹" + (base * months);
             });
         }
 
+        // Animated checkout redirect
         function goToPayment(itemName, basePrice, type) {
             const url = `payment.html?item=${encodeURIComponent(itemName)}&price=${basePrice}&months=${currentDurationMonths}&type=${type}`;
-            window.location.href = url;
+            document.getElementById('appContainer').classList.add('genie-out');
+            setTimeout(() => { window.location.href = url; }, 750); 
+        }
+
+        // --- KIT PREVIEW DATA ---
+        const kitImages = {
+            "ORBIT": "https://cdn.discordapp.com/attachments/1497642231493038120/1503341893835034634/Screenshot_2026-05-11-14-06-29-38_18ef886008aeac98d3b32feccbe7d3f9.jpg?ex=6a02ffbe&is=6a01ae3e&hm=a5e76787ed08f02397d9f8379bf77d6527aebb02b8ac12039c06e8ebbe69c52f&",
+            "NOVA": "https://cdn.discordapp.com/attachments/1497642231493038120/1503342634502979776/Screenshot_2026-05-11-14-08-00-76_18ef886008aeac98d3b32feccbe7d3f9.jpg?ex=6a03006e&is=6a01aeee&hm=18f32260735bf3a1d95fd972106ef42ed26f77d2cbc7345b19cf7b6130fa3c79&",
+            "AURORA": "https://cdn.discordapp.com/attachments/1497642231493038120/1503342702790447114/Screenshot_2026-05-11-14-09-41-60_18ef886008aeac98d3b32feccbe7d3f9.jpg?ex=6a03007f&is=6a01aeff&hm=b7f67ae53c5a4e50266372800bf07f42bd77905583a8aa1684468b712f99bdeb&",
+            "SUPERNOVA": "https://cdn.discordapp.com/attachments/1497642231493038120/1503342784575438889/Screenshot_2026-05-11-14-11-25-73_18ef886008aeac98d3b32feccbe7d3f9.jpg?ex=6a030092&is=6a01af12&hm=14019e4f00e482feea595c1c04ea4a4fb98e8a932c36621c7961a4ea57e157ac&",
+            "CELESTIAL KING": "https://cdn.discordapp.com/attachments/1497642231493038120/1503342821749424229/Screenshot_2026-05-11-14-13-16-60_18ef886008aeac98d3b32feccbe7d3f9.jpg?ex=6a03009b&is=6a01af1b&hm=3bcf461e6d8e78c4e5189eadc68d7cd4582c99aaa2ca3ff06075a01e34eda70a&"
+        };
+
+        function openKitPreview(rankName) {
+            document.getElementById('kitTitle').textContent = rankName;
+            const modal = document.getElementById('kitModal');
+            const img = document.getElementById('previewImg');
+            const loader = document.getElementById('loader');
+            
+            img.style.display = 'none';
+            img.src = ''; 
+            loader.style.display = 'flex'; 
+            modal.classList.add('active'); 
+            
+            const targetSrc = kitImages[rankName];
+            const tempImg = new Image();
+            tempImg.src = targetSrc; 
+
+            setTimeout(() => {
+                img.src = targetSrc; 
+                loader.style.display = 'none'; 
+                img.style.display = 'block'; 
+            }, 2000);
+        }
+
+        function closeKitPreview() {
+            document.getElementById('kitModal').classList.remove('active');
         }
     </script>
 </body>
