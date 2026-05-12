@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CelestialMc • Crates</title>
-    <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>CelestialMc • Crates Store</title>
+    
+    <!-- Fonts: Outfit (Body), Russo One (Pricing) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Russo+One&display=swap" rel="stylesheet">
+    <!-- Minecraft Font (Titles) -->
+    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
     
     <style>
         :root {
@@ -16,10 +20,10 @@
           --border: rgba(192, 132, 252, 0.2);
           --text: #f8fafc;
           --muted: #94a3b8;
-          --alert-gold: #f59e0b; 
+          --alert-red: #ef4444; 
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Space Grotesk", sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Outfit", sans-serif; }
 
         body {
           background-color: var(--bg);
@@ -29,55 +33,51 @@
           min-height: 100vh;
         }
 
+        /* FONT CLASSES */
+        .mc-font { font-family: 'Minecraft', sans-serif !important; letter-spacing: 2px; }
+        .price-font { font-family: 'Russo One', sans-serif !important; letter-spacing: 1px; }
+
         .particle {
-          position: fixed;
-          top: -10%;
-          background-color: var(--primary-purple);
-          border-radius: 50%;
-          opacity: 0.3;
-          pointer-events: none;
-          z-index: 1;
+          position: fixed; top: -10%; background-color: var(--primary-purple);
+          border-radius: 50%; opacity: 0.3; pointer-events: none; z-index: 1;
           animation: fall linear infinite;
         }
+        @keyframes fall { 0% { transform: translateY(0vh) scale(0); opacity: 0.6; } 50% { opacity: 0.4; } 100% { transform: translateY(100vh) scale(1); opacity: 0; } }
 
-        @keyframes fall {
-          0% { transform: translateY(0vh) scale(0); opacity: 0.6; }
-          50% { opacity: 0.4; }
-          100% { transform: translateY(100vh) scale(1); opacity: 0; }
-        }
+        .app-container { transform-origin: bottom center; animation: genieIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; width: 100%; }
+        .genie-out { animation: genieOut 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important; }
 
-        .purple-gradient {
-          background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: 800;
-        }
+        @keyframes genieIn { 0% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); } 100% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); } }
+        @keyframes genieOut { 0% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); } 100% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); } }
 
-        .section-title { text-align: center; font-size: 2.5rem; font-weight: 900; margin-top: 60px; margin-bottom: 10px; position: relative; z-index: 2; }
+        .purple-gradient { background: linear-gradient(135deg, var(--primary-purple) 0%, var(--secondary-purple) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
 
         .page-nav { position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 999; }
-        .page-nav a { padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 700; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-size: 0.75rem; transition: 0.3s; }
-        .page-nav .active { background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple)); color: #fff; border: none; box-shadow: 0 0 15px rgba(192, 132, 252, 0.4); }
+        .page-nav a { padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 700; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-size: 0.85rem; transition: 0.3s; }
+        .page-nav a:hover { border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); }
+        .page-nav .active { background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple)); color: #fff; border: none; box-shadow: 0 0 15px rgba(192, 132, 252, 0.3); }
 
-        .back-btn { position: fixed; top: 20px; left: 20px; z-index: 999; padding: 10px 20px; border-radius: 12px; text-decoration: none; color: var(--text); background: var(--glass); border: 1px solid var(--border); backdrop-filter: blur(10px); font-weight: 700; font-size: 0.75rem; transition: 0.3s; }
-        .back-btn:hover { border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); }
-
-        .rank-grid { padding: 60px 8% 80px; display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); position: relative; z-index: 2; }
-        .rank-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); padding: 45px 35px; border-radius: 2rem; backdrop-filter: blur(15px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; position: relative; }
+        .rank-grid { padding: 40px 8% 80px; display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); position: relative; z-index: 2; }
+        .rank-card { background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border); padding: 40px 30px; border-radius: 2rem; backdrop-filter: blur(15px); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; position: relative; align-items: center;}
         .rank-card:hover { transform: translateY(-12px); border-color: var(--primary-purple); background: rgba(192, 132, 252, 0.05); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); }
-        .rank-card h3 { font-size: 2rem; font-weight: 900; text-align: center; }
-        .price { font-size: 2.2rem; font-weight: 900; text-align: center; margin: 15px 0; color: var(--primary-purple); }
-        .rank-card ul { list-style: none; margin: 20px 0; flex-grow: 1; }
-        .rank-card li { margin-bottom: 12px; color: var(--muted); font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
-        .rank-card li::before { content: "➜"; font-size: 0.8rem; color: var(--primary-purple); font-weight: bold; }
-        .cmd { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 1rem; font-size: 0.8rem; color: var(--text); margin-bottom: 25px; border: 1px solid var(--border); text-align: center; font-weight: 600; }
+        
+        .rank-card img { width: 80px; height: 80px; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); image-rendering: pixelated;}
+        .rank-card h3 { font-size: 1.6rem; text-align: center; text-shadow: 0 5px 10px rgba(0,0,0,0.5); margin-bottom: 5px;}
+        
+        /* Pricing applied with Russo One */
+        .price { font-size: 2.5rem; text-align: center; margin: 10px 0 20px; color: var(--primary-purple); }
+        
+        .cmd { background: rgba(0,0,0,0.4); padding: 15px; border-radius: 1rem; font-size: 0.85rem; color: var(--text); margin-bottom: 25px; border: 1px solid var(--border); text-align: center; font-weight: 600; width: 100%;}
 
-        .btn-purple { background: linear-gradient(90deg, var(--secondary-purple), var(--primary-purple)); color: #fff; font-weight: 900; text-transform: uppercase; border: none; padding: 16px; border-radius: 12px; text-decoration: none; text-align: center; transition: 0.3s; font-size: 0.85rem; letter-spacing: 1px; cursor: pointer; width: 100%; display: inline-block; box-sizing: border-box; }
+        .btn-purple { background: linear-gradient(90deg, var(--secondary-purple), var(--primary-purple)); color: #fff; font-weight: 800; text-transform: uppercase; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; transition: 0.3s; font-size: 0.9rem; letter-spacing: 1px; margin-top: auto;}
         .btn-purple:hover { filter: brightness(1.2); box-shadow: 0 0 25px rgba(192, 132, 252, 0.6); transform: translateY(-2px); }
 
-        .badge { position: absolute; top: 25px; right: 25px; background: var(--primary-purple); color: #fff; padding: 5px 15px; border-radius: 8px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; }
-
-        .text-vote { color: #94a3b8; } .text-vip { color: #e2e8f0; } .text-spawner { color: #22c55e; } .text-infinity { color: #06b6d4; } .text-celestial { color: var(--primary-purple); } .text-cosmic { color: #f59e0b; text-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+        /* Custom Colors */
+        .text-basic { color: #a3e635; } 
+        .text-spawner { color: #facc15; } 
+        .text-infinity { color: #c084fc; } 
+        .text-celestial { color: #ef4444; } 
+        .text-cosmic { color: #06b6d4; text-shadow: 0 0 10px rgba(6, 182, 212, 0.3); } 
 
         footer { text-align: center; padding: 60px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; position: relative; z-index: 2; }
     </style>
@@ -85,98 +85,79 @@
 
 <body>
 
-    <a href="index.html" class="back-btn">← BACK</a>
-
     <nav class="page-nav">
-        <a href="index.html">HOME</a>
-        <a href="rules.html">RULES</a>
-        <a href="store.html">STORE</a>
-        <a href="crates.html" class="active">CRATES</a>
+        <a href="#" onclick="navigate(event, 'index.html')">HOME</a>
+        <a href="#" onclick="navigate(event, 'rules.html')">RULES</a>
+        <a href="#" onclick="navigate(event, 'store.html')">RANKS</a>
+        <a href="#" onclick="navigate(event, 'crates.html')" class="active">CRATES</a>
     </nav>
 
-    <header style="text-align: center; padding: 120px 20px 0px; position: relative; z-index: 2;">
-        <h1 class="purple-gradient section-title">Crate Keys</h1>
-        <p style="color: var(--muted); font-style: italic;">Test your luck with our exclusive server crates</p>
-    </header>
+    <main id="appContainer" class="app-container">
 
-    <section class="rank-grid">
-        
-    
+        <header style="text-align: center; padding: 120px 20px 0px; position: relative; z-index: 2;">
+            <h1 class="purple-gradient mc-font" style="font-size: 2.8rem;">Crate Keys</h1>
+            <p style="color: var(--primary-purple); font-style: italic; margin-top: 5px;">Unlock powerful rewards. Quantities can be selected at checkout.</p>
+        </header>
 
-       
+        <section class="rank-grid">
+            
+            <!-- BASIC CRATE -->
+            <div class="rank-card">
+                <img src="https://i.ibb.co/hxV3NkQS/file-000000002610720baf701dc600f7ab40.png" alt="Key">
+                <h3 class="mc-font text-basic">BASIC KEY</h3>
+                <p style="color: var(--muted); text-align: center; font-size: 0.9rem;">Contains basic starter loot, ores, and low-tier enchants.</p>
+                <span class="price price-font" style="color: #a3e635;">₹19</span>
+                <p class="cmd">x1 Key Per Purchase</p>
+                <button class="btn-purple" onclick="goToPayment('BASIC CRATE KEY', 19)">Purchase Key</button>
+            </div>
 
-        <div class="rank-card">
-            <h3 class="text-basic">BASIC CRATE</h3>
-            <span class="price" style="color: #94a3b8;">₹49</span>
-            <ul>
-                <li>1× Basic Crate Key</li>
-                <li>Chance for Diamonds/Iron</li>
-                <li>Chance for basic enchantments</li>
-                <li>Guaranteed IGM payout</li>
-            </ul>
-            <p class="cmd">Bundle Purchase (1 Key)</p>
-            <button class="btn-purple" onclick="goToPayment('1x BASIC CRATE KEY', 49, 'crate')">Buy Now</button>
-        </div>
+            <!-- SPAWNER CRATE -->
+            <div class="rank-card">
+                <img src="https://i.ibb.co/1tsxJywf/file-000000003c08720b84bcea5a03eb57f1.png" alt="Key">
+                <h3 class="mc-font text-spawner">SPAWNER KEY</h3>
+                <p style="color: var(--muted); text-align: center; font-size: 0.9rem;">High chance to drop mob spawners and economy items.</p>
+                <span class="price price-font" style="color: #facc15;">₹39</span>
+                <p class="cmd">x2 Keys Per Bundle</p>
+                <button class="btn-purple" onclick="goToPayment('SPAWNER CRATE KEY', 39)">Purchase Key</button>
+            </div>
 
-        <div class="rank-card">
-            <h3 class="text-spawner">SPAWNER CRATE</h3>
-            <span class="price" style="color: #22c55e;">₹149</span>
-            <ul>
-                <li>2× Spawner Crate Keys</li>
-                <li>High chance for Mob Spawners</li>
-                <li>Chance for spawn eggs</li>
-                <li>Guaranteed rare drops</li>
-            </ul>
-            <p class="cmd">Bundle Purchase (2 Keys)</p>
-            <button class="btn-purple" onclick="goToPayment('2x SPAWNER CRATE KEYS', 149, 'crate')">Buy Now</button>
-        </div>
+            <!-- INFINITY CRATE -->
+            <div class="rank-card">
+                <img src="https://i.ibb.co/NQXxbjP/file-000000005aec720b82e0a8a29ef4e2be.png" alt="Key">
+                <h3 class="mc-font text-infinity">INFINITY KEY</h3>
+                <p style="color: var(--muted); text-align: center; font-size: 0.9rem;">Packed with god-tier armor, rare items, and high cash notes.</p>
+                <span class="price price-font">₹79</span>
+                <p class="cmd">x3 Keys Per Bundle</p>
+                <button class="btn-purple" onclick="goToPayment('INFINITY CRATE KEY', 79)">Purchase Key</button>
+            </div>
 
-        <div class="rank-card">
-            <h3 class="text-infinity">INFINITY CRATE</h3>
-            <span class="price" style="color: #06b6d4;">₹299</span>
-            <ul>
-                <li>3× Infinity Crate Keys</li>
-                <li>Chance for God Tools</li>
-                <li>High tier enchantments</li>
-                <li>Exclusive cosmetics</li>
-            </ul>
-            <p class="cmd">Bundle Purchase (3 Keys)</p>
-            <button class="btn-purple" onclick="goToPayment('3x INFINITY CRATE KEYS', 299, 'crate')">Buy Now</button>
-        </div>
+            <!-- CELESTIAL CRATE -->
+            <div class="rank-card" style="border-color: rgba(239, 68, 68, 0.3);">
+                <img src="https://i.ibb.co/v6LrQdBZ/file-000000000b4c720b9d34b8fbab177818.png" alt="Key">
+                <h3 class="mc-font text-celestial">CELESTIAL KEY</h3>
+                <p style="color: var(--muted); text-align: center; font-size: 0.9rem;">The signature crate. Contains rank upgrades, max tools, and exclusive cosmetics.</p>
+                <span class="price price-font" style="color: #ef4444;">₹199</span>
+                <p class="cmd" style="color: #ef4444;">x4 Keys Per Bundle</p>
+                <button class="btn-purple" style="background: linear-gradient(90deg, #b91c1c, #ef4444);" onclick="goToPayment('CELESTIAL CRATE KEY', 199)">Purchase Key</button>
+            </div>
 
-        <div class="rank-card">
-            <h3 class="text-celestial">CELESTIAL CRATE</h3>
-            <span class="price" style="color: var(--primary-purple);">₹499</span>
-            <ul>
-                <li>4× Celestial Crate Keys</li>
-                <li>Guaranteed Max Enchantments</li>
-                <li>Chance for Rank Upgrades</li>
-                <li>Massive IGM Payouts</li>
-            </ul>
-            <p class="cmd" style="color: var(--primary-purple); border-color: rgba(192, 132, 252, 0.3);">Bundle Purchase (4 Keys)</p>
-            <button class="btn-purple" onclick="goToPayment('4x CELESTIAL CRATE KEYS', 499, 'crate')">Buy Now</button>
-        </div>
+            <!-- COSMIC EMPEROR CRATE -->
+            <div class="rank-card" style="border-color: rgba(6, 182, 212, 0.4);">
+                <img src="https://i.ibb.co/vCW53yYv/file-000000008538720b8200dbc6ff58480f.png" alt="Key">
+                <h3 class="mc-font text-cosmic">COSMIC EMPEROR</h3>
+                <p style="color: var(--muted); text-align: center; font-size: 0.9rem;">The ultimate gamble. Unimaginable wealth, admin items, and global perks.</p>
+                <span class="price price-font" style="color: #06b6d4;">₹299</span>
+                <p class="cmd" style="color: #06b6d4;">x6 Keys Per Bundle</p>
+                <button class="btn-purple" style="background: linear-gradient(90deg, #0891b2, #06b6d4);" onclick="goToPayment('COSMIC EMPEROR CRATE KEY', 299)">Purchase Key</button>
+            </div>
 
-        <div class="rank-card" style="border-color: #f59e0b;">
-            <div class="badge" style="background: #f59e0b; color: #000;">ULTIMATE LOOT</div>
-            <h3 class="text-cosmic">COSMIC EMPEROR</h3>
-            <span class="price" style="color: #f59e0b;">₹999</span>
-            <ul>
-                <li>6× Cosmic Emperor Keys</li>
-                <li>Best loot on the server</li>
-                <li>Chance for Celestial King rank</li>
-                <li>Exclusive God Tier armor</li>
-                <li>Extremely Rare Titles</li>
-            </ul>
-            <p class="cmd" style="color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">Bundle Purchase (6 Keys)</p>
-            <button class="btn-purple" onclick="goToPayment('6x COSMIC EMPEROR KEYS', 999, 'crate')" style="background: linear-gradient(90deg, #d97706, #f59e0b); box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); color: #000;">Buy Now</button>
-        </div>
+        </section>
 
-    </section>
+        <footer>
+            <p>&copy; 2026 CelestialMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
+        </footer>
 
-    <footer>
-        <p>&copy; 2026 CelestialMc Network • Designed by <span class="purple-gradient">Nexus</span></p>
-    </footer>
+    </main>
 
     <script>
         function createParticle() {
@@ -192,9 +173,18 @@
         }
         setInterval(createParticle, 200);
 
-        function goToPayment(itemName, basePrice, type) {
-            const url = `payment.html?item=${encodeURIComponent(itemName)}&price=${basePrice}&months=1&type=${type}`;
-            window.location.href = url;
+        function navigate(e, url) {
+            e.preventDefault(); 
+            if (url === 'crates.html' && window.location.pathname.endsWith('crates.html')) return; 
+            document.getElementById('appContainer').classList.add('genie-out');
+            setTimeout(() => { window.location.href = url; }, 750); 
+        }
+
+        // Sends user to payment.html with type=crate so the quantity selector shows up
+        function goToPayment(itemName, basePrice) {
+            const url = `payment.html?item=${encodeURIComponent(itemName)}&price=${basePrice}&type=crate`;
+            document.getElementById('appContainer').classList.add('genie-out');
+            setTimeout(() => { window.location.href = url; }, 750); 
         }
     </script>
 </body>
