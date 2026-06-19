@@ -6,6 +6,14 @@
     <title>CelestialMc • Secure Checkout</title>
     <link href="https://fonts.bunny.net/css?family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
     
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+       (function(){
+          // You will put your actual EmailJS Public Key here
+          emailjs.init("YOUR_PUBLIC_KEY"); 
+       })();
+    </script>
+
     <style>
         :root {
           --bg: #020617;
@@ -51,36 +59,21 @@
             text-align: center;
             
             transform-origin: bottom center; 
-            /* Slower entrance: 0.8 seconds */
             animation: genieIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .genie-out {
-            /* Slower exit: 0.8 seconds */
             animation: genieOut 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards !important;
         }
 
         @keyframes genieIn {
-            0% {
-                opacity: 0;
-                /* Reduced rotation from -30deg to -15deg for a more subtle bend */
-                transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px);
-            }
-            100% {
-                opacity: 1;
-                transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
-            }
+            0% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
+            100% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
         }
 
         @keyframes genieOut {
-            0% {
-                opacity: 1;
-                transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0);
-            }
-            100% {
-                opacity: 0;
-                transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px);
-            }
+            0% { opacity: 1; transform: perspective(1200px) rotateX(0deg) scale(1) translateY(0); }
+            100% { opacity: 0; transform: perspective(1200px) rotateX(-15deg) scale(0.2) translateY(800px); }
         }
         /* -------------------------------------- */
 
@@ -95,42 +88,20 @@
         
         /* Glassmorphism Dropdown */
         .form-group select {
-            width: 100%; 
-            padding: 14px 15px; 
+            width: 100%; padding: 14px 15px; 
             background: var(--glass) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23c084fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>') no-repeat right 15px center;
-            background-size: 18px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border);
-            border-radius: 12px; 
-            color: #fff; 
-            outline: none; 
-            transition: 0.3s ease; 
-            font-family: inherit;
-            font-weight: 600;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+            background-size: 18px; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border); border-radius: 12px; color: #fff; outline: none; 
+            transition: 0.3s ease; font-family: inherit; font-weight: 600; cursor: pointer;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
         }
         
         .form-group select:hover, .form-group select:focus { 
-            border-color: var(--primary-purple); 
-            background-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(192, 132, 252, 0.2); 
+            border-color: var(--primary-purple); background-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 15px rgba(192, 132, 252, 0.2); 
         }
         
-        .form-group select option { 
-            background: var(--bg-accent); 
-            color: #fff; 
-            font-weight: 600;
-            padding: 10px;
-        }
-
-        .form-group input[type="file"] {
-            padding: 10px; background: rgba(192, 132, 252, 0.1); border: 1px dashed var(--primary-purple); color: var(--muted); cursor: pointer;
-        }
-        
+        .form-group select option { background: var(--bg-accent); color: #fff; font-weight: 600; padding: 10px; }
+        .form-group input[type="file"] { padding: 10px; background: rgba(192, 132, 252, 0.1); border: 1px dashed var(--primary-purple); color: var(--muted); cursor: pointer; }
         .form-group input[type="number"] { font-size: 1.1rem; font-weight: bold; text-align: center; }
 
         .qr-box { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 10px 0 20px 0; }
@@ -165,6 +136,11 @@
         <div class="form-group">
             <label>Discord ID / Tag <span style="color: var(--primary-purple);">*REQUIRED*</span></label>
             <input type="text" id="discordInput" placeholder="Example: thearyan_01">
+        </div>
+
+        <div class="form-group">
+            <label>Email Address <span style="color: var(--primary-purple);">*REQUIRED*</span></label>
+            <input type="email" id="emailInput" placeholder="player@gmail.com">
         </div>
 
         <div class="form-group" id="qtyGroup" style="display: none;">
@@ -224,7 +200,6 @@
             e.preventDefault();
             document.getElementById('checkoutBox').classList.add('genie-out');
             
-            // Adjusted timer to match the slower 0.8s animation
             setTimeout(() => {
                 window.location.href = purchaseType === 'crate' ? "crates.html" : "store.html";
             }, 750); 
@@ -282,12 +257,13 @@
 
         async function submitPayment() {
             const ign = document.getElementById('ignInput').value.trim();
+            const email = document.getElementById('emailInput').value.trim();
             const trxId = document.getElementById('trxInput').value.trim();
             const discordId = document.getElementById('discordInput').value.trim();
             const activeUpi = document.getElementById('upiSelect').value;
             const fileInput = document.getElementById('screenshotInput');
 
-            if(!ign || !trxId || !discordId) { alert("Please enter your Minecraft IGN, Discord ID, and Transaction ID."); return; }
+            if(!ign || !trxId || !discordId || !email) { alert("Please enter your Minecraft IGN, Email, Discord ID, and Transaction ID."); return; }
             if(fileInput.files.length === 0) { alert("You MUST upload a payment screenshot to continue!"); return; }
 
             const btn = document.getElementById('submitBtn');
@@ -333,6 +309,7 @@
                     fields: [
                         { name: "Minecraft IGN", value: `\`${ign}\``, inline: true },
                         { name: "Discord ID", value: `**${discordId}**`, inline: true },
+                        { name: "Email", value: `\`${email}\``, inline: true },
                         { name: "Item", value: itemField, inline: true },
                         { name: "Amount", value: `**₹${finalPrice}**`, inline: true },
                         { name: "Paid To (UPI)", value: `\`${activeUpi}\``, inline: true },
@@ -348,13 +325,31 @@
             formData.append('payload_json', JSON.stringify(payload));
 
             try {
+                // 1. Send the Discord Webhook
                 const response = await fetch(WEBHOOK_URL, {
                     method: 'POST',
                     body: formData 
                 });
 
                 if (response.ok || response.status === 204) {
-                    alert(`Payment submitted successfully!\n\nYour screenshot has been sent to the staff team. We will verify your payment and contact you on Discord (${discordId}) shortly.`);
+                    
+                    // 2. Fire the EmailJS automated email
+                    // You will replace YOUR_SERVICE_ID and YOUR_TEMPLATE_ID
+                    const emailParams = {
+                        to_email: email,
+                        to_name: ign,
+                        package_name: selectedItem,
+                        transaction_id: trxId
+                    };
+                    
+                    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", emailParams)
+                        .then(function(res) {
+                            console.log("Email Sent!", res.status, res.text);
+                        }, function(err) {
+                            console.log("Email Failed...", err);
+                        });
+
+                    alert(`Payment submitted successfully!\n\nAn email receipt is being sent to ${email}. We will verify your payment and contact you on Discord (${discordId}) shortly.`);
                     
                     document.getElementById('checkoutBox').classList.add('genie-out');
                     setTimeout(() => {
